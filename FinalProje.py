@@ -3,6 +3,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from Human import *
+from Dog import *
 import math as m
 
 class Camera():
@@ -13,7 +14,7 @@ class Camera():
     directionY = 0
     xPos = 0.0
     zPos = 1.0
-    yPos = 12.0
+    yPos = 6.0
 
 camera =Camera()
 def LoadTextures(str):
@@ -43,6 +44,15 @@ def getHuman():
     glRotatef(-57.5*(camera.angleY), 0,1, 0)
     drawHuman()
     glPopMatrix()
+
+def getDog():
+    global camera
+    glPushMatrix()
+    glTranslatef(5, 4.5, -7)
+    drawDog()
+    glPopMatrix()
+
+
 def display():
     global camera
     glClearColor(0.0, 0.0, 0.0, 0.0)
@@ -103,6 +113,7 @@ def display():
     glDisable(GL_TEXTURE_2D)
     glPopMatrix()
     getHuman()
+    getDog()
     glutSwapBuffers()
 
 def keyPressed(*args):
