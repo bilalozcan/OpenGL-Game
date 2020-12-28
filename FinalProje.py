@@ -16,10 +16,10 @@ class Camera():
     yPos = 12.0
 
 camera =Camera()
-def LoadTextures():
+def LoadTextures(str):
     # global texture
     glActiveTexture(GL_TEXTURE0)
-    image = Image.open("grass.png")
+    image = Image.open(str)
 
     ix = image.size[0]
     iy = image.size[1]
@@ -59,7 +59,7 @@ def display():
               camera.zPos + camera.directionZ, 0, 1, 0)
     glPushMatrix()
     glActiveTexture(GL_TEXTURE0)
-    LoadTextures()
+    LoadTextures("grass.png")
     glColor3f(0.55, 0.92, 0.49)
     glBegin(GL_QUADS)
 
@@ -68,6 +68,37 @@ def display():
     glTexCoord2f(1.0, 1.0), glVertex3f(30.0, 0.0, 30.0)
     glTexCoord2f(1.0, 0.0), glVertex3f(30.0, 0.0, -30.0)
 
+    glEnd()
+    glDisable(GL_TEXTURE_2D)
+    LoadTextures("air.png")
+    glColor3f(1, 1, 1)
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 0.0),glVertex3f(-30.0, 0.0, -30.0)
+    glTexCoord2f(0.0, 1.0),glVertex3f(-30, 30, -30.0)
+    glTexCoord2f(1.0, 1.0),glVertex3f(30.0, 30.0, -30.0)
+    glTexCoord2f(1.0, 0.0),glVertex3f(30.0, 0.0, -30.0)
+    glEnd()
+    
+    glColor3f(1, 1, 1)
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 0.0),glVertex3f(-30.0, 0.0, 30.0)
+    glTexCoord2f(0.0, 1.0),glVertex3f(-30, 30, 30.0)
+    glTexCoord2f(1.0, 1.0),glVertex3f(30.0, 30.0, 30.0)
+    glTexCoord2f(1.0, 0.0),glVertex3f(30.0, 0.0, 30.0)
+    glEnd()
+    glColor3f(1, 1, 1)
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 0.0),glVertex3f(-30.0, -30.0, -30.0)
+    glTexCoord2f(0.0, 1.0),glVertex3f(-30.0, -30, 30.0)
+    glTexCoord2f(1.0, 1.0),glVertex3f(-30.0, 30.0, 30.0)
+    glTexCoord2f(1.0, 0.0),glVertex3f(-30.0,30.0 , -30.0)
+    glEnd()
+    glColor3f(1, 1, 1)
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 0.0),glVertex3f(30.0, -30.0, -30.0)
+    glTexCoord2f(0.0, 1.0),glVertex3f(30.0, -30, 30.0)
+    glTexCoord2f(1.0, 1.0),glVertex3f(30.0, 30.0, 30.0)
+    glTexCoord2f(1.0, 0.0),glVertex3f(30.0,30.0 , -30.0)
     glEnd()
     glDisable(GL_TEXTURE_2D)
     glPopMatrix()
