@@ -60,7 +60,6 @@ def display():
     glPushMatrix()
     glActiveTexture(GL_TEXTURE0)
     LoadTextures()
-    glEnable(GL_TEXTURE_2D)
     glColor3f(0.55, 0.92, 0.49)
     glBegin(GL_QUADS)
 
@@ -102,7 +101,7 @@ def main():
     glutInitWindowSize(1920, 1080)
     glutInitWindowPosition(0, 0)
     glutIdleFunc(display)
-    glutCreateWindow("FollowwwwMe")
+    glutCreateWindow(b"Followw")
     glutDisplayFunc(display)
     glutIdleFunc(display)
     glutKeyboardFunc(keyPressed)
