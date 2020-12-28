@@ -68,8 +68,9 @@ def display():
     glTexCoord2f(1.0, 0.0), glVertex3f(80.0, 0.0, -80.0)
 
     glEnd()
-    glDisable(GL_TEXTURE_2D)
-    LoadTextures("aa.png")
+    glDisable(GL_TEXTURE_3D)
+    LoadTextures("aa2.png")
+
     glColor3f(1, 1, 1)
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 1.0),glVertex3f(-80.0, 0.0, -80.0)
@@ -91,6 +92,7 @@ def display():
     glTexCoord2f(1.0, 0.0), glVertex3f(80.0, 30.0, 80.0)
     glTexCoord2f(1.0, 1.0), glVertex3f(80.0, 0.0, 80.0)
     glEnd()
+    LoadTextures("aa1.png")
     glColor3f(1, 1, 1)
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 1.0), glVertex3f(-80.0, 0.0, 80.0)
