@@ -1,10 +1,10 @@
-from PIL import Image
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
-from OpenGL.GLUT import *
 from Human import *
 from Dog import *
 import math as m
+from MapTexture import*
 
 class Camera():
     angleX = 0.0
@@ -17,24 +17,6 @@ class Camera():
     yPos = 6.0
 
 camera =Camera()
-def LoadTextures(str):
-    # global texture
-    glActiveTexture(GL_TEXTURE0)
-    image = Image.open(str)
-
-    ix = image.size[0]
-    iy = image.size[1]
-    image = image.tobytes("raw", "RGB")
-
-    glShadeModel(GL_SMOOTH)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGB, GL_UNSIGNED_BYTE, image)
-    glEnable(GL_TEXTURE_2D)
-
-
 def getHuman():
     global camera
     glPushMatrix()
@@ -48,10 +30,9 @@ def getHuman():
 def getDog():
     global camera
     glPushMatrix()
-    glTranslatef(5, 4.5, -7)
+    glTranslatef(5, 2, -7)
     drawDog()
     glPopMatrix()
-
 
 def display():
     global camera
@@ -62,72 +43,19 @@ def display():
     glShadeModel(GL_SMOOTH)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60.0, 8.0 / 4.0, 1, 5000)
+    gluPerspective(60.0, 8.0 / 4.0, 1, 600)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
-    gluLookAt(camera.xPos, camera.yPos, camera.zPos, camera.xPos + camera.directionX, camera.yPos-0.2 + camera.directionY,
+    gluLookAt(camera.xPos, camera.yPos, camera.zPos, camera.xPos + camera.directionX, camera.yPos-0.3 + camera.directionY,
               camera.zPos + camera.directionZ, 0, 1, 0)
-    glPushMatrix()
-    glActiveTexture(GL_TEXTURE0)
-    LoadTextures("grass.png")
-    glColor3f(0.55, 0.92, 0.49)
-    glBegin(GL_QUADS)
-    glTexCoord2f(0.0, 0.0), glVertex3f(-80.0, 0.0, -80.0)
-    glTexCoord2f(0.0, 1.0), glVertex3f(-80.0, 0.0, 80.0)
-    glTexCoord2f(1.0, 1.0), glVertex3f(80.0, 0.0, 80.0)
-    glTexCoord2f(1.0, 0.0), glVertex3f(80.0, 0.0, -80.0)
-
-    glEnd()
-    glDisable(GL_TEXTURE_3D)
-    LoadTextures("aa2.png")
-
-    glColor3f(1, 1, 1)
-    glBegin(GL_QUADS)
-    glTexCoord2f(0.0, 1.0),glVertex3f(-80.0, 0.0, -80.0)
-    glTexCoord2f(0.0, 0.0),glVertex3f(-80, 30, -80.0)
-    glTexCoord2f(1.0, 0.0),glVertex3f(80.0, 30.0, -80.0)
-    glTexCoord2f(1.0, 1.0),glVertex3f(80.0, 0.0, -80.0)
-    glEnd()
-    glColor3f(1, 1, 1)
-    glBegin(GL_QUADS)
-    glTexCoord2f(0.0, 1.0),glVertex3f(-80.0, 0.0, 80.0)
-    glTexCoord2f(0.0, 0.0),glVertex3f(-80, 30, 80.0)
-    glTexCoord2f(1.0, 0.0),glVertex3f(80.0, 30.0, 80.0)
-    glTexCoord2f(1.0, 1.0),glVertex3f(80.0, 0.0, 80.0)
-    glEnd()
-    glColor3f(1, 1, 1)
-    glBegin(GL_QUADS)
-    glTexCoord2f(0.0, 1.0), glVertex3f(80.0, 0.0, -80.0)
-    glTexCoord2f(0.0, 0.0), glVertex3f(80, 30, -80.0)
-    glTexCoord2f(1.0, 0.0), glVertex3f(80.0, 30.0, 80.0)
-    glTexCoord2f(1.0, 1.0), glVertex3f(80.0, 0.0, 80.0)
-    glEnd()
-    LoadTextures("aa1.png")
-    glColor3f(1, 1, 1)
-    glBegin(GL_QUADS)
-    glTexCoord2f(0.0, 1.0), glVertex3f(-80.0, 0.0, 80.0)
-    glTexCoord2f(0.0, 0.0), glVertex3f(-80, 30, 80.0)
-    glTexCoord2f(1.0, 0.0), glVertex3f(-80.0, 30.0, -80.0)
-    glTexCoord2f(1.0, 1.0), glVertex3f(-80.0, 0.0, -80.0)
-    glEnd()
-    glDisable(GL_TEXTURE_2D)
-    LoadTextures("gokyuzu.png")
-    glColor3f(1, 1, 1)
-    glBegin(GL_QUADS)
-    glTexCoord2f(0.0, 0.0), glVertex3f(-80.0, 30.0, -80.0)
-    glTexCoord2f(0.0, 1.0), glVertex3f(-80.0, 30.0, 80.0)
-    glTexCoord2f(1.0, 1.0), glVertex3f(80.0, 30.0, 80.0)
-    glTexCoord2f(1.0, 0.0), glVertex3f(80.0, 30.0, -80.0)
-    glEnd()
-    glDisable(GL_TEXTURE_2D)
-    glPopMatrix()
+    mapTexture(300,100,300)
     getHuman()
     getDog()
     glutSwapBuffers()
 
 def keyPressed(*args):
     global camera
-    fraction = 1
+    fraction = 2
     if args[0] == b"a":
         camera.angleY -= 0.05
         camera.directionX = m.sin(camera.angleY)
