@@ -93,7 +93,7 @@ def keyPressed(*args):
 def HumanSpace():
     global camera
     if(camera.humanSpace != 0 and camera.humanSpace<2):
-        camera.humanSpace += 0.1
+        camera.humanSpace += 0.11
     else:
         camera.humanSpace = 0
 def mouse(button,state,x,y):
