@@ -19,7 +19,7 @@ def LoadTextures(str):
 def mapTexture(mapX,mapY,mapZ):
     glPushMatrix()
     glActiveTexture(GL_TEXTURE0)
-    LoadTextures("grass.png")
+    LoadTextures("assets/grass.png")
     glColor3f(0.55, 0.92, 0.49)
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 0.0), glVertex3f(-mapX, 0.0, -mapZ)
@@ -29,7 +29,7 @@ def mapTexture(mapX,mapY,mapZ):
 
     glEnd()
     glDisable(GL_TEXTURE_3D)
-    LoadTextures("aa2.png")
+    LoadTextures("assets/aa2.png")
 
     glColor3f(1, 1, 1)
     glBegin(GL_QUADS)
@@ -52,7 +52,7 @@ def mapTexture(mapX,mapY,mapZ):
     glTexCoord2f(1.0, 0.0), glVertex3f(mapX, mapY, mapZ)
     glTexCoord2f(1.0, 1.0), glVertex3f(mapX, 0.0, mapZ)
     glEnd()
-    LoadTextures("aa1.png")
+    LoadTextures("assets/aa1.png")
     glColor3f(1, 1, 1)
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 1.0), glVertex3f(-mapX, 0.0, mapZ)
@@ -61,7 +61,7 @@ def mapTexture(mapX,mapY,mapZ):
     glTexCoord2f(1.0, 1.0), glVertex3f(-mapX, 0.0, -mapZ)
     glEnd()
     glDisable(GL_TEXTURE_2D)
-    LoadTextures("gokyuzu.png")
+    LoadTextures("assets/gokyuzu.png")
     glColor3f(1, 1, 1)
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 0.0), glVertex3f(-mapX, mapY, -mapZ)
