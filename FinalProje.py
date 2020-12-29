@@ -8,6 +8,20 @@ from MapTexture import*
 
 windowX = 1920
 windowY=1080
+class Human():
+    sagBacakAngle = 0
+    solBacakAngle = 0
+    durum =0
+human = Human()
+def KosmaDurum():
+    global human
+    if (human.durum == 0):
+        human.sagBacakAngle += 5
+        human.solBacakAngle -= 5
+        human.durum += 1
+    print("sag bacak",human.sagBacakAngle)
+
+
 class Camera():
     angleX = 0.0
     angleY = 0.05
@@ -25,19 +39,21 @@ class Camera():
     mouse_y = 0
     mouse_left=1
     humanSpace = 0
+    humanSpaceControl = False
     x =0
     y= 0
+
 camera =Camera()
 
 def getHuman():
-    global camera
+    global camera ,human
     glPushMatrix()
     glTranslatef(0, 5, 0)
     #glTranslatef(camera.xPos+8*camera.directionX, 0, (camera.zPos)+8*camera.directionZ)
     glTranslatef(camera.xPos+8*camera.directionX , camera.humanSpace, (camera.zPos)+8*camera.directionZ )
     HumanSpace()
     glRotatef(-57.5*(camera.angleY), 0,1, 0)
-    drawHuman()
+    drawHuman(human)
     glPopMatrix()
 
 def getDog():
@@ -80,22 +96,29 @@ def keyPressed(*args):
         #camera.directionX = m.sin(camera.angleY)
         #camera.directionZ = -m.cos(camera.angleY)
     elif args[0] == b"w":
+        KosmaDurum()
         camera.xPos += camera.directionX*fraction
         camera.zPos += camera.directionZ*fraction
         camera.yPos += camera.directionY*fraction
     elif args[0] == b"s":
+        KosmaDurum()
         camera.xPos -= camera.directionX * fraction
         camera.zPos -= camera.directionZ * fraction
         camera.yPos -= camera.directionY * fraction
     elif args[0] == b" ":
-        camera.humanSpace = 0.1
+        if(camera.humanSpace==0):
+            camera.humanSpaceControl = True
     glutPostRedisplay()
 def HumanSpace():
     global camera
-    if(camera.humanSpace != 0 and camera.humanSpace<2):
-        camera.humanSpace += 0.11
-    else:
-        camera.humanSpace = 0
+    if(camera.humanSpaceControl ):
+        camera.humanSpace += 0.1
+        if(camera.humanSpace>=2):
+            camera.humanSpaceControl = False
+    elif(camera.humanSpace>0):
+        camera.humanSpace -= 0.2
+        if(camera.humanSpace<0):
+            camera.humanSpace=0
 def mouse(button,state,x,y):
     global camera
     if GLUT_LEFT_BUTTON == 0:
@@ -111,7 +134,6 @@ def mouse(button,state,x,y):
         camera.directionYmouse += -(y - camera.mouse_y)*0.0005"""
 def mouseMotion(x,y):
     global camera
-    print(camera.mouse_x)
     if (camera.mouse_x == 0):
         camera.mouse_x = x
         if (x > windowX / 2):
@@ -122,14 +144,14 @@ def mouseMotion(x,y):
             camera.angleY -= 0.03
             camera.directionX = m.sin(camera.angleY)
             camera.directionZ = -m.cos(camera.angleY)
-    if(x>1900):
+    if(x>1800):
         camera.mouse_x = x
-        camera.angleY += 0.03
+        camera.angleY += 0.1
         camera.directionX = m.sin(camera.angleY)
         camera.directionZ = -m.cos(camera.angleY)
-    if(x<20):
+    if(x<100):
         camera.mouse_x = x
-        camera.angleY -= 0.03
+        camera.angleY -= 0.1
         camera.directionX = m.sin(camera.angleY)
         camera.directionZ = -m.cos(camera.angleY)
     else:
@@ -146,11 +168,14 @@ def mouseMotion(x,y):
 def MouseWheel(*args):
     global camera
     if args[1] == -1:
-        camera.yPos -= 0.1
+        if(camera.yPos>3):
+            camera.yPos -= 0.1
     elif args[1] == 1:
-        camera.yPos += 0.1
+        if(camera.yPos<9):
+            camera.yPos += 0.1
     else:
         pass
+    print(camera.yPos)
     glutPostRedisplay()
 
 def main():
