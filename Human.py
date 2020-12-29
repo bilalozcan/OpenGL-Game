@@ -1,6 +1,7 @@
 from OpenGL.GLUT import *
 from RectangularPrism import *
-def drawHuman():
+
+def drawHuman(human):
     # KAFA
     glPushMatrix()
     glColor3f(0, 1, 0)
@@ -46,22 +47,25 @@ def drawHuman():
     glTranslatef(0.3, -2.6, 0)
     glColor3f(0.44, 0.77, 0.66)
     glutSolidSphere(0.22, 20, 20)
+    glRotatef(human.sagBacakAngle, 1, 0, 0)
     glColor3f(0.5, 0.5, 0.5)
-    glTranslatef(0, -0.95, 0)
+    glTranslatef(0, -0.95,0)
     RectangularPrism(0.15, 1, 0.25)
     glPopMatrix()
 
     # SOL BACAK
+
     glPushMatrix()
     glTranslatef(-0.3, -2.6, 0)
     glColor3f(0.44, 0.77, 0.66)
     glutSolidSphere(0.22, 20, 20)
+    glRotatef(human.solBacakAngle, 1, 0, 0)
     glColor3f(0.5, 0.5, 0.5)
     glTranslatef(0, -0.95, 0)
     RectangularPrism(0.15, 1, 0.25)
     glPopMatrix()
 
-    # SAĞ AYAK
+    """# SAĞ AYAK
     glPushMatrix()
     glColor3f(0.1, 0.1, 0.1)
     glTranslatef(0.3, -4.65, -0.165)
@@ -73,4 +77,4 @@ def drawHuman():
     glColor3f(0.1, 0.1, 0.1)
     glTranslatef(-0.3, -4.65, -0.165)
     RectangularPrism(0.15, 0.1, 0.4)
-    glPopMatrix()
+    glPopMatrix()"""
