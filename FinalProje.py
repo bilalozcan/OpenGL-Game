@@ -2,12 +2,12 @@ from OpenGL.GLU import *
 from Human import *
 from Dog import *
 import math as m
+
 from MapTexture import *
 
 windowX = 1920
 windowY = 1080
 stopTime = 2.0
-
 class Human():
     sagBacakAngle = 0
     solBacakAngle = 0
@@ -118,6 +118,8 @@ def keyPressed(*args):
         # camera.directionX = m.sin(camera.angleY)
         # camera.directionZ = -m.cos(camera.angleY)
     elif args[0] == b"w":
+        ses = pygame.mixer.Sound("assets/sounds/walk-minecraft.mp3")
+        ses.play()
         KosmaDurum(True)
         camera.xPos += camera.directionX * fraction
         camera.zPos += camera.directionZ * fraction
@@ -219,6 +221,7 @@ def human_Control(value):
 
 
 def main():
+    init()
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
     glutInitWindowSize(windowX, windowY)
@@ -234,6 +237,7 @@ def main():
     glutTimerFunc(int(1000/stopTime), human_Control, human.sagBacakAngle)
     glutMainLoop()
     glEnable(GL_DEPTH_TEST)
+
 
 
 main()
