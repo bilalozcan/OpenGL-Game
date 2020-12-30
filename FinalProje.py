@@ -1,5 +1,4 @@
 
-from OpenGL.GL import *
 from OpenGL.GLU import *
 from Human import *
 from Dog import *
@@ -13,12 +12,22 @@ class Human():
     solBacakAngle = 0
     durum =0
 human = Human()
-def KosmaDurum():
+def KosmaDurum(control):
     global human
-    if (human.durum == 0):
-        human.sagBacakAngle += 5
-        human.solBacakAngle -= 5
-        human.durum += 1
+    if(control == True):
+        if (human.durum == 0):
+            human.sagBacakAngle += 5
+            human.solBacakAngle -= 5
+            if(human.sagBacakAngle > 40):
+                human.durum = 1
+        elif (human.durum == 1):
+            human.sagBacakAngle -= 5
+            human.solBacakAngle += 5
+            if(human.sagBacakAngle < -40):
+                human.durum = 0
+    else:
+        human.sagBacakAngle = 0
+        human.solBacakAngle = 0
     print("sag bacak",human.sagBacakAngle)
 
 
@@ -44,7 +53,6 @@ class Camera():
     y= 0
 
 camera =Camera()
-
 def getHuman():
     global camera ,human
     glPushMatrix()
@@ -83,7 +91,8 @@ def display():
     glutSwapBuffers()
 
 def keyPressed(*args):
-    global camera
+    global camera,human
+    gelenTus = args[0]
     fraction = 2
     if args[0] == b"a":
         pass
@@ -96,12 +105,11 @@ def keyPressed(*args):
         #camera.directionX = m.sin(camera.angleY)
         #camera.directionZ = -m.cos(camera.angleY)
     elif args[0] == b"w":
-        KosmaDurum()
+        KosmaDurum(True)
         camera.xPos += camera.directionX*fraction
         camera.zPos += camera.directionZ*fraction
         camera.yPos += camera.directionY*fraction
     elif args[0] == b"s":
-        KosmaDurum()
         camera.xPos -= camera.directionX * fraction
         camera.zPos -= camera.directionZ * fraction
         camera.yPos -= camera.directionY * fraction

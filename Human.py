@@ -27,6 +27,7 @@ def drawHuman(human):
     glTranslatef(0.5, -0.65, 0)
     glColor3f(0, 1, 1)
     glutSolidSphere(0.22,20,20)
+    glRotatef(human.solBacakAngle, 1, 0, 0)
     glColor3f(0.23, 0.78, 1)
     glTranslatef(0.18, -0.65, 0)
     RectangularPrism(0.15, 0.8, 0.25)
@@ -37,6 +38,7 @@ def drawHuman(human):
     glTranslatef(-0.5, -0.65, 0)
     glColor3f(0.23, 0.45, 0.36)
     glutSolidSphere(0.22, 20, 20)
+    glRotatef(human.sagBacakAngle, 1, 0, 0)
     glColor3f(0.88, 0.88, 0.12)
     glTranslatef(-0.18, -0.65, 0)
     RectangularPrism(0.15, 0.8, 0.25)
@@ -51,6 +53,12 @@ def drawHuman(human):
     glColor3f(0.5, 0.5, 0.5)
     glTranslatef(0, -0.95,0)
     RectangularPrism(0.15, 1, 0.25)
+    #SAG AYAK
+    glPushMatrix()
+    glColor3f(0.1, 0.1, 0.1)
+    glTranslatef(0.0, -1.1, -0.165)
+    RectangularPrism(0.15, 0.1, 0.4)
+    glPopMatrix()
     glPopMatrix()
 
     # SOL BACAK
@@ -63,18 +71,10 @@ def drawHuman(human):
     glColor3f(0.5, 0.5, 0.5)
     glTranslatef(0, -0.95, 0)
     RectangularPrism(0.15, 1, 0.25)
-    glPopMatrix()
-
-    """# SAĞ AYAK
+    #SOL AYAK
     glPushMatrix()
     glColor3f(0.1, 0.1, 0.1)
-    glTranslatef(0.3, -4.65, -0.165)
+    glTranslatef(0.0, -1.1, -0.165)
     RectangularPrism(0.15, 0.1, 0.4)
     glPopMatrix()
-
-    # SOL AYAK
-    glPushMatrix()
-    glColor3f(0.1, 0.1, 0.1)
-    glTranslatef(-0.3, -4.65, -0.165)
-    RectangularPrism(0.15, 0.1, 0.4)
-    glPopMatrix()"""
+    glPopMatrix()
