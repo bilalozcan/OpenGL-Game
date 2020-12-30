@@ -2,12 +2,30 @@ from OpenGL.GLU import *
 from Human import *
 from Dog import *
 import math as m
-
 from MapTexture import *
+import pygame
+import time
 
+startTime = time.time()
+print(pygame.time.get_ticks())
+walkTime = 0
 windowX = 1920
 windowY = 1080
 stopTime = 2.0
+
+sesDurumu = "baslamadi"
+ses = 0
+
+def init():
+    global ses
+    pygame.init()
+    pygame.mixer.init()
+    #pygame.mixer.music.load("assets/sounds/background-sounds.mp3")
+    #pygame.mixer.music.play(-1)
+    #pygame.mixer.music.set_volume(0.1)
+    ses = pygame.mixer.Sound("assets/sounds/walk-human.mp3")
+    ses.set_volume(0.5)
+
 class Human():
     sagBacakAngle = 0
     solBacakAngle = 0
@@ -34,8 +52,7 @@ def KosmaDurum(hareket):
 
         human.sagBacakAngle = 0
         human.solBacakAngle = 0
-    
-    print("sag bacak", human.sagBacakAngle)
+
 
 
 class Camera():
@@ -105,8 +122,10 @@ def display():
 
 
 def keyPressed(*args):
-    global camera, human
+    global camera, human, walkTime, sesDurumu, ses
     fraction = 2
+
+
     if args[0] == b"a":
         pass
         # camera.angleY -= 0.05
@@ -118,8 +137,12 @@ def keyPressed(*args):
         # camera.directionX = m.sin(camera.angleY)
         # camera.directionZ = -m.cos(camera.angleY)
     elif args[0] == b"w":
-        ses = pygame.mixer.Sound("assets/sounds/walk-minecraft.mp3")
-        ses.play()
+        if sesDurumu == "baslamadi":
+            sesDurumu = "basladi"
+        elif sesDurumu == "basladi":
+            sesDurumu = "caliyor"
+        elif sesDurumu == "durdu":
+            ses.stop()
         KosmaDurum(True)
         camera.xPos += camera.directionX * fraction
         camera.zPos += camera.directionZ * fraction
@@ -133,7 +156,6 @@ def keyPressed(*args):
             camera.humanSpaceControl = True
 
     glutPostRedisplay()
-
 
 def HumanSpace():
     global camera
@@ -213,9 +235,19 @@ def MouseWheel(*args):
 
 
 def human_Control(value):
-    global human,stopTime
+    global human,stopTime,sesDurumu,ses
+
+
+    if sesDurumu == "baslamadi":
+        pass
+    elif sesDurumu == "basladi":
+        ses.play()
+    elif sesDurumu == "caliyor":
+        pass
+
     if(human.sagBacakAngle == value):
         KosmaDurum(False)
+        sesDurumu = "durdu"
     glutPostRedisplay()
     glutTimerFunc(int(1000/stopTime), human_Control,human.sagBacakAngle)
 
