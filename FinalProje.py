@@ -4,27 +4,20 @@ from Dog import *
 import math as m
 from MapTexture import *
 import pygame
-import time
 
-startTime = time.time()
-print(pygame.time.get_ticks())
-walkTime = 0
 windowX = 1920
 windowY = 1080
 stopTime = 2.0
 
-sesDurumu = "baslamadi"
-ses = 0
 
 def init():
-    global ses
     pygame.init()
     pygame.mixer.init()
-    #pygame.mixer.music.load("assets/sounds/background-sounds.mp3")
-    #pygame.mixer.music.play(-1)
-    #pygame.mixer.music.set_volume(0.1)
-    ses = pygame.mixer.Sound("assets/sounds/walk-human.mp3")
-    ses.set_volume(0.5)
+    pygame.mixer.Channel(0).play(pygame.mixer.Sound('assets/sounds/background-sounds.mp3'))
+    pygame.mixer.Channel(0).set_volume(0.01)
+    pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
+    pygame.mixer.Channel(1).stop()
+
 
 class Human():
     sagBacakAngle = 0
@@ -122,9 +115,8 @@ def display():
 
 
 def keyPressed(*args):
-    global camera, human, walkTime, sesDurumu, ses
+    global camera, human
     fraction = 2
-
 
     if args[0] == b"a":
         pass
@@ -137,12 +129,10 @@ def keyPressed(*args):
         # camera.directionX = m.sin(camera.angleY)
         # camera.directionZ = -m.cos(camera.angleY)
     elif args[0] == b"w":
-        if sesDurumu == "baslamadi":
-            sesDurumu = "basladi"
-        elif sesDurumu == "basladi":
-            sesDurumu = "caliyor"
-        elif sesDurumu == "durdu":
-            ses.stop()
+        if pygame.mixer.Channel(1).get_busy():
+            pass
+        else:
+            pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
         KosmaDurum(True)
         camera.xPos += camera.directionX * fraction
         camera.zPos += camera.directionZ * fraction
@@ -235,19 +225,10 @@ def MouseWheel(*args):
 
 
 def human_Control(value):
-    global human,stopTime,sesDurumu,ses
-
-
-    if sesDurumu == "baslamadi":
-        pass
-    elif sesDurumu == "basladi":
-        ses.play()
-    elif sesDurumu == "caliyor":
-        pass
-
+    global human,stopTime
     if(human.sagBacakAngle == value):
         KosmaDurum(False)
-        sesDurumu = "durdu"
+        pygame.mixer.Channel(1).stop()
     glutPostRedisplay()
     glutTimerFunc(int(1000/stopTime), human_Control,human.sagBacakAngle)
 
