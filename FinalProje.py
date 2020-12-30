@@ -19,6 +19,7 @@ def init():
     pygame.mixer.Channel(1).stop()
 
 
+
 class Human():
     sagBacakAngle = 0
     solBacakAngle = 0
@@ -102,7 +103,7 @@ def display():
     glShadeModel(GL_SMOOTH)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60.0, 8.0 / 4.0, 1, 600)
+    gluPerspective(60.0, 8.0 / 4.0, 1, 850)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     gluLookAt(camera.xPos, camera.yPos, camera.zPos, camera.xPos + camera.directionX + camera.directionXmouse,
@@ -153,6 +154,8 @@ def HumanSpace():
         camera.humanSpace += 0.1
         if (camera.humanSpace >= 2):
             camera.humanSpaceControl = False
+            pygame.mixer.Channel(2).play(pygame.mixer.Sound('assets/sounds/Jump-Human.mp3'))
+            pygame.mixer.Channel(2).set_volume(0.03)
     elif (camera.humanSpace > 0):
         camera.humanSpace -= 0.2
         if (camera.humanSpace < 0):
