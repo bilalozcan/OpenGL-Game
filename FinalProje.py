@@ -4,9 +4,20 @@ from Human import *
 from Dog import *
 import math as m
 from MapTexture import*
+import pygame
 
 windowX = 1920
 windowY=1080
+
+def init():
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load("assets/sounds/background-sounds.mp3")
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.1)
+
+
+
 class Human():
     sagBacakAngle = 0
     solBacakAngle = 0
@@ -105,6 +116,8 @@ def keyPressed(*args):
         #camera.directionX = m.sin(camera.angleY)
         #camera.directionZ = -m.cos(camera.angleY)
     elif args[0] == b"w":
+        ses = pygame.mixer.Sound("assets/sounds/walk-minecraft.mp3")
+        ses.play()
         KosmaDurum(True)
         camera.xPos += camera.directionX*fraction
         camera.zPos += camera.directionZ*fraction
@@ -187,6 +200,7 @@ def MouseWheel(*args):
     glutPostRedisplay()
 
 def main():
+    init()
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
     glutInitWindowSize(windowX, windowY)
@@ -201,5 +215,6 @@ def main():
     glutPassiveMotionFunc(mouseMotion)
     glutMainLoop()
     glEnable(GL_DEPTH_TEST)
+
 
 main()
