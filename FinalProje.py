@@ -100,6 +100,7 @@ def getDog():
     glPushMatrix()
     glTranslatef(0, 1, 0)
     glTranslatef(camera.xPos + dogX * camera.directionX, 0, (camera.zPos) + dogX * camera.directionZ)
+    glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
     drawDog()
     glPopMatrix()
 
