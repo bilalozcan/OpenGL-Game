@@ -4,11 +4,11 @@ from Dog import *
 import math as m
 from MapTexture import *
 import pygame
-
+import random
 windowX = 1920
 windowY = 1080
 stopTime = 2.0
-
+dogX = 6.0
 
 def init():
     pygame.init()
@@ -86,9 +86,20 @@ def getHuman():
 
 
 def getDog():
-    global camera
+    global camera, dogX
+    rand = random.randint(0, 1)
+    if rand == 1:
+        if dogX >= 13 and dogX < 14.1:
+            r = random.randint(0, 3)
+            if r == 0:
+                dogX -= random.uniform(0, 0.05)
+            else:
+                dogX += random.uniform(0, 0.05)
+        elif dogX <= 13:
+            dogX += random.uniform(0, 0.05)
     glPushMatrix()
-    glTranslatef(5, 2, -7)
+    glTranslatef(0, 1, 0)
+    glTranslatef(camera.xPos + dogX * camera.directionX, 0, (camera.zPos) + dogX * camera.directionZ)
     drawDog()
     glPopMatrix()
 
