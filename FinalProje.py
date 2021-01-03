@@ -4,11 +4,11 @@ from Dog import *
 import math as m
 from MapTexture import *
 import pygame
-
+import random
 windowX = 1920
 windowY = 1080
 stopTime = 2.0
-
+dogX = 6.0
 
 def init():
     pygame.init()
@@ -17,7 +17,6 @@ def init():
     pygame.mixer.Channel(0).set_volume(0.01)
     pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
     pygame.mixer.Channel(1).stop()
-
 
 
 class Human():
@@ -60,7 +59,7 @@ class Camera():
     directionY = 0
     xPos = 0.0
     zPos = 1.0
-    yPos = 6.0
+    yPos = 8.0
     zoom = 0.2
     mouse_x = 0
     mouse_y = 0
@@ -79,7 +78,7 @@ def getHuman():
     glPushMatrix()
     glTranslatef(0, 5, 0)
     # glTranslatef(camera.xPos+8*camera.directionX, 0, (camera.zPos)+8*camera.directionZ)
-    glTranslatef(camera.xPos + 8 * camera.directionX, camera.humanSpace, (camera.zPos) + 8 * camera.directionZ)
+    glTranslatef(camera.xPos + 15 * camera.directionX, camera.humanSpace, (camera.zPos) + 15 * camera.directionZ)
     HumanSpace()
     glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
     drawHuman(human)
@@ -87,9 +86,20 @@ def getHuman():
 
 
 def getDog():
-    global camera
+    global camera, dogX
+    rand = random.randint(0, 1)
+    if rand == 1:
+        if dogX >= 13 and dogX < 14.1:
+            r = random.randint(0, 3)
+            if r == 0:
+                dogX -= random.uniform(0, 0.05)
+            else:
+                dogX += random.uniform(0, 0.05)
+        elif dogX <= 13:
+            dogX += random.uniform(0, 0.05)
     glPushMatrix()
-    glTranslatef(5, 2, -7)
+    glTranslatef(0, 1, 0)
+    glTranslatef(camera.xPos + dogX * camera.directionX, 0, (camera.zPos) + dogX * camera.directionZ)
     drawDog()
     glPopMatrix()
 
@@ -103,11 +113,11 @@ def display():
     glShadeModel(GL_SMOOTH)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60.0, 8.0 / 4.0, 1, 850)
+    gluPerspective(60.0, 8.0 / 4.0, 1, 600)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     gluLookAt(camera.xPos, camera.yPos, camera.zPos, camera.xPos + camera.directionX + camera.directionXmouse,
-              camera.yPos - camera.zoom + camera.directionY + camera.directionYmouse,
+              camera.yPos - camera.zoom + camera.directionY-0.18 + camera.directionYmouse,
               camera.zPos + camera.directionZ + camera.directionZmouse, 0, 1, 0)
     mapTexture(300, 100, 300)
     getHuman()
@@ -118,7 +128,8 @@ def display():
 def keyPressed(*args):
     global camera, human
     fraction = 2
-
+    if args[0] == b"\x1b":
+        glutDestroyWindow(b"Followw")
     if args[0] == b"a":
         pass
         # camera.angleY -= 0.05
@@ -154,8 +165,6 @@ def HumanSpace():
         camera.humanSpace += 0.1
         if (camera.humanSpace >= 2):
             camera.humanSpaceControl = False
-            pygame.mixer.Channel(2).play(pygame.mixer.Sound('assets/sounds/Jump-Human.mp3'))
-            pygame.mixer.Channel(2).set_volume(0.03)
     elif (camera.humanSpace > 0):
         camera.humanSpace -= 0.2
         if (camera.humanSpace < 0):
