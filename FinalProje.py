@@ -4,18 +4,20 @@ from Dog import *
 import math as m
 from MapTexture import *
 import pygame
+import random
 
 windowX = 1920
 windowY = 1080
 stopTime = 2.0
-
+dogX = 6
 
 def init():
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('assets/sounds/background-sounds.mp3'))
-    pygame.mixer.Channel(0).set_volume(0.01)
-    pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
+    pygame.mixer.Channel(0).set_volume(0.05)
+    pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-minecraft.mp3'))
+    pygame.mixer.Channel(1).set_volume(0.1)
     pygame.mixer.Channel(1).stop()
 
 
@@ -86,10 +88,25 @@ def getHuman():
 
 
 def getDog():
-    global camera
+    global camera, dogX
+    rand = random.randint(0,1)
+    if rand == 1:
+        if dogX >= 13 and dogX < 14.1:
+            r = random.randint(0,3)
+            if r == 0:
+                dogX -= random.uniform(0, 0.05)
+            else:
+                dogX += random.uniform(0, 0.05)
+        elif dogX <= 13:
+            dogX += random.uniform(0,0.05)
+
+
     glPushMatrix()
-    glTranslatef(5, 2, -7)
-    drawDog()
+    glTranslatef(0, 1, 0)
+    glTranslatef(camera.xPos + dogX * camera.directionX, 0, (camera.zPos) + dogX * camera.directionZ)
+
+    #glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
+    drawDog(human)
     glPopMatrix()
 
 
@@ -133,7 +150,7 @@ def keyPressed(*args):
         if pygame.mixer.Channel(1).get_busy():
             pass
         else:
-            pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
+            pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-minecraft.mp3'))
         KosmaDurum(True)
         camera.xPos += camera.directionX * fraction
         camera.zPos += camera.directionZ * fraction

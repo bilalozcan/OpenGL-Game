@@ -1,7 +1,7 @@
 from OpenGL.GLUT import *
 from RectangularPrism import *
 
-def drawDog():
+def drawDog(human):
     # GÖVDE
     glPushMatrix()
     glColor3f(0.37, 0.18, 0)
@@ -59,28 +59,32 @@ def drawDog():
 
     # SOL ÖN AYAK
     glPushMatrix()
-    glTranslatef(-0.18, -0.7, -0.4)
+    glRotatef(human.solBacakAngle, 1, 0, 0)
+    glTranslatef(-0.18, -1, -0.4)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
     # SAĞ ÖN AYAK
     glPushMatrix()
-    glTranslatef(0.18, -0.7, -0.4)
+    glRotatef(human.sagBacakAngle, 1, 0, 0)
+    glTranslatef(0.18, -1, -0.4)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
     # SOL ARKA AYAK
     glPushMatrix()
-    glTranslatef(-0.18, -0.7, 0.8)
+    glRotatef(human.solBacakAngle, 1, 0, 0)
+    glTranslatef(-0.18, -1, 0.8)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
     # SAĞ ARKA AYAK
     glPushMatrix()
-    glTranslatef(0.18, -0.7, 0.8)
+    glRotatef(human.sagBacakAngle, 1, 0, 0)
+    glTranslatef(0.18, -1, 0.8)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
