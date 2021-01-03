@@ -59,7 +59,7 @@ class Camera():
     directionY = 0
     xPos = 0.0
     zPos = 1.0
-    yPos = 6.0
+    yPos = 8.0
     zoom = 0.2
     mouse_x = 0
     mouse_y = 0
@@ -78,7 +78,7 @@ def getHuman():
     glPushMatrix()
     glTranslatef(0, 5, 0)
     # glTranslatef(camera.xPos+8*camera.directionX, 0, (camera.zPos)+8*camera.directionZ)
-    glTranslatef(camera.xPos + 8 * camera.directionX, camera.humanSpace, (camera.zPos) + 8 * camera.directionZ)
+    glTranslatef(camera.xPos + 15 * camera.directionX, camera.humanSpace, (camera.zPos) + 15 * camera.directionZ)
     HumanSpace()
     glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
     drawHuman(human)
@@ -106,7 +106,7 @@ def display():
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     gluLookAt(camera.xPos, camera.yPos, camera.zPos, camera.xPos + camera.directionX + camera.directionXmouse,
-              camera.yPos - camera.zoom + camera.directionY + camera.directionYmouse,
+              camera.yPos - camera.zoom + camera.directionY-0.18 + camera.directionYmouse,
               camera.zPos + camera.directionZ + camera.directionZmouse, 0, 1, 0)
     mapTexture(300, 100, 300)
     getHuman()
@@ -117,7 +117,8 @@ def display():
 def keyPressed(*args):
     global camera, human
     fraction = 2
-
+    if args[0] == b"\x1b":
+        glutDestroyWindow(b"Followw")
     if args[0] == b"a":
         pass
         # camera.angleY -= 0.05
