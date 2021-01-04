@@ -4,17 +4,17 @@ def LoadTextures(str):
     # global texture
     glActiveTexture(GL_TEXTURE0)
     image = Image.open(str)
-
+    image = image.convert('RGBA')
     ix = image.size[0]
     iy = image.size[1]
-    image = image.tobytes("raw", "RGB")
+    image = image.tobytes("raw", "RGBA")
 
     glShadeModel(GL_SMOOTH)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGB, GL_UNSIGNED_BYTE, image)
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
     glEnable(GL_TEXTURE_2D)
 def mapTexture(mapX,mapY,mapZ):
     glPushMatrix()
