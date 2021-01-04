@@ -5,8 +5,8 @@ def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
     if z_value > plusBox.z1 and z_value < plusBox.z2 and x_value > plusBox.x1 and x_value < plusBox.x2:
         plusBox.hide = False
         pygame.mixer.Channel(5).play(pygame.mixer.Sound('assets/sounds/eat.mp3'))
-        if(human.carpismaSayisi>10):
-            human.carpismaSayisi -= 10
+        if(human.carpismaSayisi>-30):
+            human.carpismaSayisi -= 20
     for i in range(0,6):
         if z_value > boxList[i][2] and z_value < boxList[i][3] and x_value > boxList[i][0] and x_value < boxList[i][1]:
             human.engelVar =True

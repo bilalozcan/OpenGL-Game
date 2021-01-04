@@ -55,6 +55,9 @@ class Human():
     hareket = False
     engelVar = False
     carpismaSayisi =0
+    xPos = 0
+    zPos =-5
+    backStep =0
 
 
 class Dog():
@@ -208,11 +211,11 @@ def EndMenu():
     glPopMatrix()
     glutSwapBuffers()
 def textWrite(string):
-    glTranslatef(camera.xPos + 10 * camera.directionX, 9.5, (camera.zPos) + 10 * camera.directionZ)
-    glColor3f(1,1,1)
+
+    glColor3f(1,0,0)
     glRasterPos3f(0, 0, 0)
     for i in string:
-        glutBitmapCharacter(glut.GLUT_BITMAP_9_BY_15, ord(i))
+        glutBitmapCharacter(glut.GLUT_BITMAP_TIMES_ROMAN_24, ord(i))
 
 def display():
     global camera,dog,human,boxCordinate, boxList,plusBox
@@ -241,30 +244,41 @@ def display():
     for i in range(0,6):
         boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1],"assets/box-texture.png"))
     getHuman(camera, human, boxList,plusBox)
-    textWrite(str(dog.hiz))
+    if(tus.keyW == False):
+        dog.hiz += 0.01
+    glPushMatrix()
+    stra = "KOPEK HIZI:{:.3}".format(dog.hiz)
+    glTranslatef(camera.xPos + 10 * camera.directionX, 9.3, (camera.zPos) + 10 * camera.directionZ)
+    textWrite(stra)
+    glPopMatrix()
+    glPushMatrix()
+    strb = "GERI ADIM SAYISI:{:.2}".format(str(20-human.backStep))
+    glTranslatef(camera.xPos + 10 * camera.directionX, 9, (camera.zPos) + 10 * camera.directionZ)
+    textWrite(strb)
+    glPopMatrix()
     glutSwapBuffers()
 
 def keyControl():
     global camera,human,tus
     if(human.engelVar == False):
-        if tus.keyW == True:
+        if(tus.keyW==True and tus.keyA):
+            pass
+        if (tus.keyW == True and tus.keyD):
+            pass
+        elif tus.keyW == True:
             if pygame.mixer.Channel(1).get_busy():
                 pass
             else:
                 pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
-            camera.xPos += camera.directionX*2
-            camera.zPos += camera.directionZ*2
-            camera.yPos += camera.directionY*2
-            dog.hiz -= 0.05
+            camera.xPos += camera.directionX*1.5
+            camera.zPos += camera.directionZ*1.5
+            camera.yPos += camera.directionY*1.5
+
 
         elif(tus.keyA):
-            camera.angleY -= 0.05
-            camera.directionX = m.sin(camera.angleY)
-            camera.directionZ = -m.cos(camera.angleY)
+            pass
         elif(tus.keyD):
-            camera.angleY += 0.05
-            camera.directionX = m.sin(camera.angleY)
-            camera.directionZ = -m.cos(camera.angleY)
+            pass
 def keyUp(*args):
     global  tus
     if args[0] == b"a":
@@ -298,13 +312,17 @@ def keyPressed(*args):
         elif args[0] == b"w":
             human.hareket = True
             tus.keyW = True
-        elif args[0] == b"s":
-            human.engelVar = False
-            camera.xPos -= camera.directionX
-            camera.zPos -= camera.directionZ
-            camera.yPos -= camera.directionY
+        elif args[0] == b"s" :
+            if(human.backStep<20):
+                human.backStep +=1
+                human.engelVar = False
+                camera.xPos -= camera.directionX
+                camera.zPos -= camera.directionZ
+                camera.yPos -= camera.directionY
 
         elif args[0] == b" ":
+            if (human.backStep > 0):
+                human.backStep -= 1
             if (human.humanSpace == 0):
                 pygame.mixer.Channel(3).play(pygame.mixer.Sound('assets/sounds/jump.mp3'))
                 human.humanSpaceControl = True
@@ -356,30 +374,30 @@ def mouseMotion(x, y):
         if (camera.mouse_x == 0):
             camera.mouse_x = x
             if (x > windowX / 2):
-                camera.angleY += 0.05
+                camera.angleY += 0.04
                 camera.directionX = m.sin(camera.angleY)
                 camera.directionZ = -m.cos(camera.angleY)
             else:
-                camera.angleY -= 0.05
+                camera.angleY -= 0.04
                 camera.directionX = m.sin(camera.angleY)
                 camera.directionZ = -m.cos(camera.angleY)
         if (x > 1800):
             camera.mouse_x = x
-            camera.angleY += 0.1
+            camera.angleY += 0.09
             camera.directionX = m.sin(camera.angleY)
             camera.directionZ = -m.cos(camera.angleY)
         if (x < 100):
             camera.mouse_x = x
-            camera.angleY -= 0.1
+            camera.angleY -= 0.09
             camera.directionX = m.sin(camera.angleY)
             camera.directionZ = -m.cos(camera.angleY)
         else:
             if (x > camera.mouse_x):
-                camera.angleY += 0.05
+                camera.angleY += 0.04
                 camera.directionX = m.sin(camera.angleY)
                 camera.directionZ = -m.cos(camera.angleY)
             else:
-                camera.angleY -= 0.05
+                camera.angleY -= 0.04
                 camera.directionX = m.sin(camera.angleY)
                 camera.directionZ = -m.cos(camera.angleY)
             camera.mouse_x = x
