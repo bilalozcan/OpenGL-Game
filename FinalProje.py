@@ -234,12 +234,12 @@ def display():
     getDog(camera,dog,human,game)
     keyControl()
     plusBox.x1, plusBox.x2, plusBox.z1, plusBox.z2 = getBox(2, 2, 2, plusBox.plusBoxCordinateX, 1,
-                                                            plusBox.plusBoxCordinateY, 1, 0, 0)
+                                                            plusBox.plusBoxCordinateY,"assets/gift.png" )
     if plusBox.hide==False:
         plusBox.hide = True
         plusBox.NewCordinate()
     for i in range(0,6):
-        boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1],0,1,0))
+        boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1],"assets/box-texture.png"))
     getHuman(camera, human, boxList,plusBox)
     textWrite(str(dog.hiz))
     glutSwapBuffers()
@@ -255,6 +255,8 @@ def keyControl():
             camera.xPos += camera.directionX*2
             camera.zPos += camera.directionZ*2
             camera.yPos += camera.directionY*2
+            dog.hiz -= 0.05
+
         elif(tus.keyA):
             camera.angleY -= 0.05
             camera.directionX = m.sin(camera.angleY)

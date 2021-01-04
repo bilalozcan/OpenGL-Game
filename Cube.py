@@ -27,14 +27,14 @@ def Cube(width, height, depth):
     glTexCoord2f(1.0, 0.0), glVertex3f(width, height, -depth)
 
     # Sol Yüzey
-    glTexCoord2f(0.0, 0.0), glVertex3f(-width, height, depth)
-    glTexCoord2f(1.0, 0.0), glVertex3f(-width, height, -depth)
-    glTexCoord2f(1.0, 1.0), glVertex3f(-width, -height, -depth)
+    glTexCoord2f(1.0, 0.0), glVertex3f(-width, height, depth)
+    glTexCoord2f(1.0, 1.0), glVertex3f(-width, height, -depth)
+    glTexCoord2f(0.0, 1.0), glVertex3f(-width, -height, -depth)
     glTexCoord2f(0.0, 0.0), glVertex3f(-width, -height, depth)
 
     # Sağ Yüzey
-    glTexCoord2f(1.0, 0.0), glVertex3f(width, height, -depth)
-    glTexCoord2f(1.0, 1.0), glVertex3f(width, height, depth)
-    glTexCoord2f(0.0, 1.0), glVertex3f(width, -height, depth)
-    glTexCoord2f(1.0, 0.0), glVertex3f(width, -height, -depth)
+    glTexCoord2f(0.0, 0.0), glVertex3f(width, height, -depth)
+    glTexCoord2f(1.0, 0.0), glVertex3f(width, height, depth)
+    glTexCoord2f(1.0, 1.0), glVertex3f(width, -height, depth)
+    glTexCoord2f(0.0, 1.0), glVertex3f(width, -height, -depth)
     glEnd()
