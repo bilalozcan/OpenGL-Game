@@ -15,5 +15,3 @@ def getBox(w,h,d,x,y,z,string):
     glPopMatrix()
     glDisable(GL_TEXTURE_2D)
     return x-w,x+w,z-d,z+d
-
-

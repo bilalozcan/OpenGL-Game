@@ -2,7 +2,9 @@ import pygame
 from OpenGL.GLUT import *
 from RectangularPrism import *
 
-''' EKLENECEK '''
+''' İnsanın engellerin içine girmesini ve sahne sınırlarının dışına çıkmasını
+    kontrol edip engelleyen fonksiyondur
+    GiftBox toplama kontrolünü de yapar'''
 def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
     if z_value > plusBox.z1 and z_value < plusBox.z2 and x_value > plusBox.x1 and x_value < plusBox.x2:
         plusBox.hide = False
@@ -26,7 +28,9 @@ def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
         human.engelVar = True
         human.carpismaSayisi += 1
 
-''' EKLENECEK '''
+''' İnsan oluşturma çağrısı burada yapılır
+    Zıplama ve hareket durumlarını kontrol eder ve değişiklik uygulanır
+'''
 def getHuman(camera,human,boxList,plusBox):
     HumanKosmaDurum(human)
     glPushMatrix()
@@ -42,7 +46,7 @@ def getHuman(camera,human,boxList,plusBox):
     drawHuman(human)
     glPopMatrix()
 
-''' EKLENECEK '''
+''' İnsanın koşma durumunu kontrol eder '''
 def HumanKosmaDurum(human):
     if(human.hareket == True and human.humanSpaceControl!=True and human.engelVar == False):
         if (human.durum == 0):
@@ -146,5 +150,3 @@ def drawHuman(human):
     RectangularPrism(0.15, 0.1, 0.4)
     glPopMatrix()
     glPopMatrix()
-
-

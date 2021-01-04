@@ -6,7 +6,14 @@ from Dog import *
 import math as m
 from MapTexture import *
 import pygame
-
+''' 3D Bir sahneden oluşan oyundur. Bir insan ve köpek vardır.
+    İnsanın köpekten kaçması gerekmektedir. Sahnede engeller ve hediye kutusu vardır.
+    İnsan engellere ve alan sınırlarına çarptıkça köpek insana yaklaşır.
+    İnsan Hediye Kutusu toplayınca köpeğin hızı azalır.
+    Köpek insanı yakaladığında oyun biter.
+    100 Puana ulaşınca oyun kazanılır.
+    P tuşuna basınca duraklatma menüsü açılır.
+'''
 ''' Ekran Boyutu için değişkenler'''
 windowX = 1920
 windowY = 1080
@@ -22,16 +29,18 @@ def init():
     pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3')) #Yürüme Ses Efekti
     pygame.mixer.Channel(1).set_volume(0.8)
     pygame.mixer.Channel(1).stop()
-    pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog1.mp3')) #Köpek Ses Efekti
-    pygame.mixer.Channel(4).set_volume(0.8)
+    pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog3.mp3')) #Köpek Ses Efekti
+    pygame.mixer.Channel(4).set_volume(0.5)
     pygame.mixer.Channel(4).stop()
     for i in range(0,6):
         boxCordinate.append([random.randint(-300,300),random.randint(-300,300)])
 ''' Oyun ve ses durumunun tutulduğu class '''
 class Game():
+    score = 0
     end = False
     pause = False
     ses = False
+    win = False
 ''' MEHMET EKLEYECEK '''
 class PlusBox():
     hide = False
@@ -110,6 +119,7 @@ boxList = []
 ''' Oyuna yeniden başlama durumunda insan/köpek/kamera konumu gibi değerleri sıfırlayan fonksiyon '''
 def restart():
     global game,plusBox,tus,camera,human,dog,stopTime
+    game.score = 0
     plusBox = PlusBox()
     tus = Tus()
     camera = Camera()
@@ -145,6 +155,7 @@ def changeScreen():
     elif CurrentScreen == PAUSE_MENU_SCREEN:
         return PauseMenu()
 
+
 ''' Ana Menü Ekranını çalıştıran fonksiyon
     Texture ile Play butonu içerir '''
 
@@ -160,7 +171,7 @@ def MainMenu():
     glColor3f(0, 1, 0)
     glTranslatef(-5,-5,0)
     glActiveTexture(GL_TEXTURE0)
-    LoadTextures("assets/main-menu.png")
+    LoadTextures("assets/main-menu-screen.png")
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 1.0), glVertex2f(0.0, 0.0)
     glTexCoord2f(0.0, 0.0), glVertex2f(0.0, 10.0)
@@ -186,9 +197,9 @@ def PauseMenu():
     glTranslatef(-5, -5, 0)
     glActiveTexture(GL_TEXTURE0)
     if(game.ses==False):
-        LoadTextures("assets/pause-menu.png")
+        LoadTextures("assets/pause-menu-screen.png")
     else:
-        LoadTextures("assets/pause-menu-mute.png")
+        LoadTextures("assets/pause-menu-mute-screen.png")
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 1.0), glVertex2f(0.0, 0.0)
     glTexCoord2f(0.0, 0.0), glVertex2f(0.0, 10.0)
@@ -212,7 +223,10 @@ def EndMenu():
     glColor3f(0, 1, 0)
     glTranslatef(-5, -5, 0)
     glActiveTexture(GL_TEXTURE0)
-    LoadTextures("assets/gameover.png")
+    if game.win == False:
+        LoadTextures("assets/gameover-screen.png")
+    else:
+        LoadTextures("assets/win-screen.png")
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 1.0), glVertex2f(0.0, 0.0)
     glTexCoord2f(0.0, 0.0), glVertex2f(0.0, 10.0)
@@ -251,21 +265,25 @@ def display():
               camera.zPos + camera.directionZ + camera.directionZmouse, 0, 1, 0)
     mapTexture(300, 100, 300) # 3D sahnenin zemin, gökyüzü ve etraf texture'larının yapılması
     getDog(camera,dog,human,game) #Verilen parametreleri kullanarak sahnede köpek oluşturur
-    keyControl() # EKLENECEK
+    keyControl() # İki tuş basma kontrolünü sağlar
     plusBox.x1, plusBox.x2, plusBox.z1, plusBox.z2 = getBox(2, 2, 2, plusBox.plusBoxCordinateX, 1,
-                                                            plusBox.plusBoxCordinateY,"assets/gift.png" )
-    if plusBox.hide==False:
+                                                            plusBox.plusBoxCordinateY,"assets/giftbox.png" )
+    if plusBox.hide == False:
         plusBox.hide = True
+        game.score += 10
+        if game.score >= 100:
+            game.end = True
+            game.win = True
         plusBox.NewCordinate()
     # Sahnede 6 tane engel oluşturulması
     for i in range(0,6):
-        boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1],"assets/box-texture.png"))
+        boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1],"assets/box.png"))
     getHuman(camera, human, boxList,plusBox)
     if(tus.keyW == False):
         dog.hiz += 0.01
     glPushMatrix()
     glColor3f(1, 0,0)
-    stra = "KOPEK HIZI:{:.3}".format(dog.hiz)
+    stra = "KÖPEK KALAN MESAFE:{:.3}".format(13.5 - dog.hiz)
     glTranslatef(camera.xPos + 10 * camera.directionX, 9.3, (camera.zPos) + 10 * camera.directionZ)
     textWrite(stra)
     glPopMatrix()
@@ -274,11 +292,19 @@ def display():
     strb = "GERI ADIM SAYISI:{:.2}".format(str(20-human.backStep))
     glTranslatef(camera.xPos + 10 * camera.directionX, 9, (camera.zPos) + 10 * camera.directionZ)
     textWrite(strb)
-
     glPopMatrix()
+    glPushMatrix()
+    glColor3f(1, 0, 0)
+    strb = "SCORE:{:.3}".format(str(game.score - 10))
+    glTranslatef(camera.xPos + 10 * camera.directionX, 9.5, (camera.zPos) + 10 * camera.directionZ)
+    textWrite(strb)
+    glPopMatrix()
+
     glutSwapBuffers()
 
-''' EKLENECEK '''
+''' İki Tuşa aynı anda basılma işlemini sağlayan fonksiyondur
+    İki tuşa basarak iki hareket işlevinin beraber yapılmasını sağlar
+'''
 def keyControl():
     global camera,human,tus
     if(human.engelVar == False):
@@ -301,7 +327,8 @@ def keyControl():
         elif(tus.keyD):
             pass
 
-''' EKLENECEK '''
+''' Tuşa basılı tutma işlevini kontrol edip
+    Ona göre insana hareket kazandıran fonksiyon '''
 def keyUp(*args):
     global  tus
     if args[0] == b"a":
@@ -311,7 +338,7 @@ def keyUp(*args):
     elif args[0] == b"w":
         pygame.mixer.Channel(1).stop()
         if (human.engelVar == True):
-            pygame.mixer.Channel(2).play(pygame.mixer.Sound('assets/sounds/carpma.mp3'))
+            pygame.mixer.Channel(2).play(pygame.mixer.Sound('assets/sounds/collision.mp3'))
         human.hareket = False
         tus.keyW = False
     elif args[0] == b" ":
@@ -352,7 +379,9 @@ def keyPressed(*args):
 
     glutPostRedisplay()
 
-''' EKLENECEK '''
+''' Menü Ekranlarında buton tıklama işlevlerini kontrol edip
+    gerekli işevleri -Gerekli Ekran Geçişlerini- yapmasını sağlayan fonksiyon 
+'''
 def mouse(button, state, x, y):
     global camera,CurrentScreen
     if GLUT_LEFT_BUTTON == 0:
@@ -387,10 +416,11 @@ def mouse(button, state, x, y):
                     pygame.mixer.Channel(0).play(pygame.mixer.Sound('assets/sounds/background-sounds.mp3'))
                     pygame.mixer.Channel(0).set_volume(0.04)
                     CurrentScreen = GAME_SCREEN
+
         if GLUT_UP == 0:
             camera.mouse_left = 0
 
-''' EKLENECEK '''
+''' Fare hareketine göre kamera açısını ayarlayan fonksiyondur '''
 def mouseMotion(x, y):
     global camera,human
     if(human.engelVar == False and CurrentScreen == GAME_SCREEN):
@@ -446,7 +476,7 @@ def main():
     glutInitWindowSize(windowX, windowY)
     glutInitWindowPosition(0, 0)
     glutIdleFunc(changeScreen)
-    glutCreateWindow(b"Followw")
+    glutCreateWindow(b"Beni Yakala 3D")
     glutDisplayFunc(changeScreen)
     glutIdleFunc(changeScreen)
     glutKeyboardFunc(keyPressed)

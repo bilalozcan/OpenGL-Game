@@ -1,14 +1,20 @@
 import random
 import pygame
 from RectangularPrism import *
-''' EKLENECEK '''
+''' Köpeği oluşturma işlevi burada çağırılır
+    İnsanın oyundaki çarpma ve hareketine göre köğein hızını ayarlar
+'''
 def getDog(camera,dog,human,game):
     dog.hareket =True
     rand = random.randint(0, 1)
-    if(dog.hiz>6):
-        pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog1.mp3'))
+    if((dog.hiz>7 and dog.hiz<7.5)or(dog.hiz>8.5 and dog.hiz<9)or(dog.hiz>10 and dog.hiz<10.5)or(dog.hiz>11.5 and dog.hiz<12) or dog.hiz>13):
+        if pygame.mixer.Channel(4).get_busy():
+            pass
+        else:
+            pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog3.mp3'))
     if dog.hiz >= 13.5 and dog.hiz < 14.1 and game.end != True:
         game.end = True
+        game.win = False
     elif (human.carpismaSayisi > 100):
         dog.hiz += 0.5
     elif (human.carpismaSayisi > 80):
@@ -17,10 +23,6 @@ def getDog(camera,dog,human,game):
         dog.hiz += 0.05
     elif (human.carpismaSayisi > 20):
         dog.hiz += 0.005
-    elif (human.carpismaSayisi < 0):
-        dog.hiz -= 0.0005
-    elif (human.carpismaSayisi < -20):
-        dog.hiz -= 0.005
 
     glPushMatrix()
     glTranslatef(0, 1, 0)
@@ -29,7 +31,7 @@ def getDog(camera,dog,human,game):
     DogKosmaDurum(dog)
     drawDog(dog)
     glPopMatrix()
-''' EKLENECEK '''
+''' Köpeğin hareketini kontrol eder'''
 def DogKosmaDurum(dog):
     if(dog.hareket == True):
         if (dog.durum == 0):
