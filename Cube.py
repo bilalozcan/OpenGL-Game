@@ -1,5 +1,8 @@
 from OpenGL.GL import *
-
+''' Verilen width, height ve depth değerleri boyutunda
+    dikdörtgenler prizmasını kaplayan fonksiyon.
+    !!!Bu fonksiyon çağırılmadan önce kaplanacak texture için gerekli init işlemleri yapılmalıdır!!!
+'''
 def Cube(width, height, depth):
     # Üst Yüzey
     glBegin(GL_QUADS)

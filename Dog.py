@@ -1,8 +1,7 @@
 import random
-
 import pygame
-
 from RectangularPrism import *
+''' EKLENECEK '''
 def getDog(camera,dog,human,game):
     dog.hareket =True
     rand = random.randint(0, 1)
@@ -28,7 +27,7 @@ def getDog(camera,dog,human,game):
     DogKosmaDurum(dog)
     drawDog(dog)
     glPopMatrix()
-
+''' EKLENECEK '''
 def DogKosmaDurum(dog):
     if(dog.hareket == True):
         if (dog.durum == 0):
@@ -48,6 +47,7 @@ def DogKosmaDurum(dog):
         dog.sagBacakAngle = 0
         dog.solBacakAngle = 0
 
+''' Dikdörtgenler prizmaları kullanılarak bir köpek oluşturan fonksiyon '''
 def drawDog(dog):
     # GÖVDE
     glPushMatrix()
