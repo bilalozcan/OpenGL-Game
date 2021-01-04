@@ -10,6 +10,7 @@ import pygame
 ''' Ekran Boyutu için değişkenler'''
 windowX = 1920
 windowY = 1080
+
 ''' Ses efektleri için başlangıçta gerekli hazırlıkların yapılması
     Engeller için rastgele koordinat atamalarının yapılması'''
 def init():
