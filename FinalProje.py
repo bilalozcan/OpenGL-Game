@@ -16,14 +16,26 @@ def init():
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('assets/sounds/background-sounds.mp3'))
-    pygame.mixer.Channel(0).set_volume(0.05)
+    pygame.mixer.Channel(0).set_volume(0.04)
     pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
     pygame.mixer.Channel(1).set_volume(0.8)
     pygame.mixer.Channel(1).stop()
-
+    pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog1.mp3'))
+    pygame.mixer.Channel(4).set_volume(0.8)
+    pygame.mixer.Channel(4).stop()
     for i in range(0,6):
         boxCordinate.append([random.randint(-300,300),random.randint(-300,300)])
-
+class PlusBox():
+    hide = False
+    plusBoxCordinateX = random.randint(-300,300)
+    plusBoxCordinateY = random.randint(-300, 300)
+    x1 = 0
+    x2 =0
+    z1 =0
+    z2 =0
+    def NewCordinate(self):
+        self.plusBoxCordinateX = random.randint(-100, 100)
+        self.plusBoxCordinateY = random.randint(-100, 100)
 class Tus():
     keyW = False
     keyA = False
@@ -68,7 +80,7 @@ class Camera():
     mouse_y = 0
     mouse_left = 1
 
-
+plusBox = PlusBox()
 tus = Tus()
 camera = Camera()
 human = Human()
@@ -116,7 +128,7 @@ def PauseMenu():
 
 
 def display():
-    global camera,dog,human,boxCordinate, boxList
+    global camera,dog,human,boxCordinate, boxList,plusBox
     pygame.mixer.Channel(0).unpause()
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -134,9 +146,14 @@ def display():
     mapTexture(300, 100, 300)
     getDog(camera,dog,human)
     keyControl()
+    plusBox.x1, plusBox.x2, plusBox.z1, plusBox.z2 = getBox(2, 2, 2, plusBox.plusBoxCordinateX, 1,
+                                                            plusBox.plusBoxCordinateY, 1, 0, 0)
+    if plusBox.hide==False:
+        plusBox.hide = True
+        plusBox.NewCordinate()
     for i in range(0,6):
-        boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1]))
-    getHuman(camera, human, boxList)
+        boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1],0,1,0))
+    getHuman(camera, human, boxList,plusBox)
     glutSwapBuffers()
 
 def keyControl():
@@ -195,6 +212,7 @@ def keyPressed(*args):
 
     elif args[0] == b" ":
         if (human.humanSpace == 0):
+            pygame.mixer.Channel(3).play(pygame.mixer.Sound('assets/sounds/jump.mp3'))
             human.humanSpaceControl = True
 
     glutPostRedisplay()

@@ -1,4 +1,7 @@
 import random
+
+import pygame
+
 from RectangularPrism import *
 def getDog(camera,dog,human):
     dog.hareket =True
@@ -13,6 +16,8 @@ def getDog(camera,dog,human):
                 dog.hiz += random.uniform(0, 0.05)
         elif dog.hiz <= 13:
             dog.hiz += random.uniform(0, 0.05)"""
+    if(dog.hiz>6):
+        pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog1.mp3'))
     if dog.hiz >= 13 and dog.hiz < 14.1:
         print("OYUN BİTTİ")
     elif (human.carpismaSayisi > 100):

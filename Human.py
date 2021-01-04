@@ -1,8 +1,12 @@
 import pygame
 from OpenGL.GLUT import *
 from RectangularPrism import *
-def is_Inside(x_value,z_value,human,camera,boxList):
-
+def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
+    if z_value > plusBox.z1 and z_value < plusBox.z2 and x_value > plusBox.x1 and x_value < plusBox.x2:
+        plusBox.hide = False
+        pygame.mixer.Channel(5).play(pygame.mixer.Sound('assets/sounds/eat.mp3'))
+        if(human.carpismaSayisi>10):
+            human.carpismaSayisi -= 10
     for i in range(0,6):
         if z_value > boxList[i][2] and z_value < boxList[i][3] and x_value > boxList[i][0] and x_value < boxList[i][1]:
             human.engelVar =True
@@ -20,12 +24,12 @@ def is_Inside(x_value,z_value,human,camera,boxList):
         human.engelVar = True
         human.carpismaSayisi += 1
 
-def getHuman(camera,human,boxList):
+def getHuman(camera,human,boxList,plusBox):
     HumanKosmaDurum(human)
     glPushMatrix()
     glTranslatef(0, 5, 0)
     #glTranslatef(camera.xPos + 15 * camera.directionX, human.humanSpace, (camera.zPos) + 15 * camera.directionZ)
-    is_Inside(camera.xPos + 15 * camera.directionX, (camera.zPos) + 15 * camera.directionZ,human,camera,boxList)
+    is_Inside(camera.xPos + 15 * camera.directionX, (camera.zPos) + 15 * camera.directionZ,human,camera,boxList,plusBox)
     if(human.engelVar==False):
         human.topxPos =camera.xPos + 15 * camera.directionX
         human.topzPos = (camera.zPos) + 15 * camera.directionZ

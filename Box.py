@@ -2,9 +2,9 @@ from OpenGL.GLUT import *
 from RectangularPrism import *
 
 
-def getBox(w,h,d,x,y,z):
+def getBox(w,h,d,x,y,z,r,g,b):
     glPushMatrix()
-    glColor3f(0, 1, 0)
+    glColor3f(r, g, b)
     glTranslatef(x, y, z)
     RectangularPrism(w, h, d)
     glPopMatrix()
