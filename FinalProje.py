@@ -9,6 +9,7 @@ import pygame
 windowX = 1920
 windowY = 1080
 
+
 def init():
     global boxCordinate
     pygame.init()
