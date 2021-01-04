@@ -1,5 +1,6 @@
 from OpenGL.GL import *
 from PIL import Image
+''' Verilen str ile texture'lama yapmak için gerekli initilaziton işlemlerini yapan fonksiyon '''
 def LoadTextures(str):
     # global texture
     glActiveTexture(GL_TEXTURE0)
@@ -16,6 +17,8 @@ def LoadTextures(str):
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
     glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
     glEnable(GL_TEXTURE_2D)
+
+''' Map paramtrelerine göre yeryüzü/gökyüzü/yan alanların texture'landığı fonksiyon '''
 def mapTexture(mapX,mapY,mapZ):
     glPushMatrix()
     glActiveTexture(GL_TEXTURE0)

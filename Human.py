@@ -1,6 +1,8 @@
 import pygame
 from OpenGL.GLUT import *
 from RectangularPrism import *
+
+''' EKLENECEK '''
 def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
     if z_value > plusBox.z1 and z_value < plusBox.z2 and x_value > plusBox.x1 and x_value < plusBox.x2:
         plusBox.hide = False
@@ -24,6 +26,7 @@ def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
         human.engelVar = True
         human.carpismaSayisi += 1
 
+''' EKLENECEK '''
 def getHuman(camera,human,boxList,plusBox):
     HumanKosmaDurum(human)
     glPushMatrix()
@@ -39,6 +42,7 @@ def getHuman(camera,human,boxList,plusBox):
     drawHuman(human)
     glPopMatrix()
 
+''' EKLENECEK '''
 def HumanKosmaDurum(human):
     if(human.hareket == True and human.humanSpaceControl!=True and human.engelVar == False):
         if (human.durum == 0):
@@ -64,7 +68,7 @@ def HumanSpace(human):
         if (human.humanSpace < 0):
             human.humanSpace = 0
 
-
+''' Dikdörtgenler prizmaları kullanılarak bir İnsan oluşturan fonksiyon '''
 def drawHuman(human):
     # KAFA
     glPushMatrix()

@@ -1,6 +1,10 @@
 from OpenGL.GL import *
 
+''' Verilen width, height ve depth değerleri boyutunda
+    dikdörtgenler prizması oluşturan fonksiyon
+'''
 def RectangularPrism(width, height, depth):
+
     #Üst Yüzey
     glBegin(GL_QUADS)
     glVertex3f(width, height, -depth)
