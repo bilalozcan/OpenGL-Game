@@ -29,7 +29,7 @@ def init():
     pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3')) #Yürüme Ses Efekti
     pygame.mixer.Channel(1).set_volume(0.8)
     pygame.mixer.Channel(1).stop()
-    pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog3.mp3')) #Köpek Ses Efekti
+    pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog-sound.mp3')) #Köpek Ses Efekti
     pygame.mixer.Channel(4).set_volume(0.5)
     pygame.mixer.Channel(4).stop()
     for i in range(0,6):

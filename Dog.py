@@ -11,7 +11,7 @@ def getDog(camera,dog,human,game):
         if pygame.mixer.Channel(4).get_busy():
             pass
         else:
-            pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog3.mp3'))
+            pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog-sound.mp3'))
     if dog.hiz >= 13.5 and dog.hiz < 14.1 and game.end != True:
         game.end = True
         game.win = False
@@ -148,4 +148,3 @@ def drawDog(dog):
     glColor3f(1,1,1)
     RectangularPrism(0.12, 0.12, 0.6)
     glPopMatrix()
-
