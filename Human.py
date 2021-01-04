@@ -56,11 +56,11 @@ def HumanKosmaDurum(human):
         human.solBacakAngle = 0
 def HumanSpace(human):
     if (human.humanSpaceControl):
-        human.humanSpace += 0.07
-        if (human.humanSpace >= 2):
+        human.humanSpace += 0.5
+        if (human.humanSpace >= 4):
             human.humanSpaceControl = False
     elif (human.humanSpace > 0):
-        human.humanSpace -= 0.1
+        human.humanSpace -= 0.5
         if (human.humanSpace < 0):
             human.humanSpace = 0
 
