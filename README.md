@@ -2,9 +2,9 @@
 Beni Yakala Oyunu
 
 İstanbul Medeniyet Üniversitesi Bilgisayar Mühendisliği öğrencilerinden:
-                    Bilal Özcan
-                    Mehmet Afif Arsay
-                    Fatih Gayberi
+                    Bilal Özcan,
+                    Mehmet Afif Arsay,
+                    Fatih Gayberi,
                     Mustafa Kemal Gökçe 
   tarafından Bilgisayar Grafikleri dersi Final projesi için geliştirilmiştir.
                     
