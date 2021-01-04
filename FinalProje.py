@@ -179,7 +179,7 @@ def keyPressed(*args):
         CurrentScreen = PAUSE_MENU_SCREEN
 
     if args[0] == b"\x1b":
-        glutDestroyWindow(b"Followw")
+        glutDestroyWindow(b"Followww")
     if args[0] == b"a":
         tus.keyA =True
     elif args[0] == b"d":
