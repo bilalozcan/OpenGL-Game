@@ -1,5 +1,65 @@
+import pygame
 from OpenGL.GLUT import *
 from RectangularPrism import *
+def is_Inside(x_value,z_value,human,camera,boxList):
+
+    for i in range(0,6):
+        if z_value > boxList[i][2] and z_value < boxList[i][3] and x_value > boxList[i][0] and x_value < boxList[i][1]:
+            human.engelVar =True
+            human.carpismaSayisi +=1
+    if(x_value>300):
+        human.engelVar = True
+        human.carpismaSayisi += 1
+    if(z_value>300):
+        human.engelVar = True
+        human.carpismaSayisi += 1
+    if (x_value < -300):
+        human.engelVar = True
+        human.carpismaSayisi += 1
+    if (z_value < -300):
+        human.engelVar = True
+        human.carpismaSayisi += 1
+
+def getHuman(camera,human,boxList):
+    HumanKosmaDurum(human)
+    glPushMatrix()
+    glTranslatef(0, 5, 0)
+    #glTranslatef(camera.xPos + 15 * camera.directionX, human.humanSpace, (camera.zPos) + 15 * camera.directionZ)
+    is_Inside(camera.xPos + 15 * camera.directionX, (camera.zPos) + 15 * camera.directionZ,human,camera,boxList)
+    if(human.engelVar==False):
+        human.topxPos =camera.xPos + 15 * camera.directionX
+        human.topzPos = (camera.zPos) + 15 * camera.directionZ
+    glTranslatef(human.topxPos, human.humanSpace, human.topzPos)
+    HumanSpace(human)
+    glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
+    drawHuman(human)
+    glPopMatrix()
+
+def HumanKosmaDurum(human):
+    if(human.hareket == True and human.humanSpaceControl!=True and human.engelVar == False):
+        if (human.durum == 0):
+            human.sagBacakAngle += 5
+            human.solBacakAngle -= 5
+            if (human.sagBacakAngle > 40):
+                human.durum = 1
+        elif (human.durum == 1):
+            human.sagBacakAngle -= 5
+            human.solBacakAngle += 5
+            if (human.sagBacakAngle < -40):
+                human.durum = 0
+    else :
+        human.sagBacakAngle = 0
+        human.solBacakAngle = 0
+def HumanSpace(human):
+    if (human.humanSpaceControl):
+        human.humanSpace += 0.07
+        if (human.humanSpace >= 2):
+            human.humanSpaceControl = False
+    elif (human.humanSpace > 0):
+        human.humanSpace -= 0.1
+        if (human.humanSpace < 0):
+            human.humanSpace = 0
+
 
 def drawHuman(human):
     # KAFA
@@ -78,3 +138,5 @@ def drawHuman(human):
     RectangularPrism(0.15, 0.1, 0.4)
     glPopMatrix()
     glPopMatrix()
+
+

@@ -1,7 +1,59 @@
-from OpenGL.GLUT import *
+import random
 from RectangularPrism import *
+def getDog(camera,dog,human):
+    dog.hareket =True
+    rand = random.randint(0, 1)
+    print(human.carpismaSayisi)
+    """if rand == 1:
+       
+            r = random.randint(0, 3)
+            if r == 0:
+                dog.hiz -= random.uniform(0, 0.05)
+            else:
+                dog.hiz += random.uniform(0, 0.05)
+        elif dog.hiz <= 13:
+            dog.hiz += random.uniform(0, 0.05)"""
+    if dog.hiz >= 13 and dog.hiz < 14.1:
+        print("OYUN BİTTİ")
+    elif (human.carpismaSayisi > 100):
+        dog.hiz += 0.5
+    elif (human.carpismaSayisi > 80):
+        dog.hiz += 0.1
+    elif (human.carpismaSayisi > 50):
+        dog.hiz += 0.05
+    elif (human.carpismaSayisi > 20):
+        dog.hiz += 0.005
+    elif(human.carpismaSayisi == 0):
+        dog.hiz = 4
 
-def drawDog():
+    glPushMatrix()
+    glTranslatef(0, 1, 0)
+    glTranslatef(camera.xPos + dog.hiz * camera.directionX, 0, (camera.zPos) + dog.hiz * camera.directionZ)
+    glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
+    DogKosmaDurum(dog)
+    drawDog(dog)
+    glPopMatrix()
+
+def DogKosmaDurum(dog):
+    if(dog.hareket == True):
+        if (dog.durum == 0):
+            dog.sagBacakAngle += dog.hiz/2
+            dog.solBacakAngle -= dog.hiz/2
+            dog.kuyruk +=dog.hiz
+            if (dog.sagBacakAngle > 40):
+                dog.durum = 1
+        elif (dog.durum == 1):
+            dog.sagBacakAngle -= dog.hiz/2
+            dog.solBacakAngle += dog.hiz/2
+            dog.kuyruk -= dog.hiz
+            if (dog.sagBacakAngle < -40):
+                dog.durum = 0
+    else :
+        dog.kuyruk = 0
+        dog.sagBacakAngle = 0
+        dog.solBacakAngle = 0
+
+def drawDog(dog):
     # GÖVDE
     glPushMatrix()
     glColor3f(0.37, 0.18, 0)
@@ -60,6 +112,7 @@ def drawDog():
     # SOL ÖN AYAK
     glPushMatrix()
     glTranslatef(-0.18, -0.7, -0.4)
+    glRotatef(dog.solBacakAngle, 1, 0, 0)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
@@ -67,6 +120,7 @@ def drawDog():
     # SAĞ ÖN AYAK
     glPushMatrix()
     glTranslatef(0.18, -0.7, -0.4)
+    glRotatef(dog.sagBacakAngle, 1, 0, 0)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
@@ -74,6 +128,7 @@ def drawDog():
     # SOL ARKA AYAK
     glPushMatrix()
     glTranslatef(-0.18, -0.7, 0.8)
+    glRotatef(dog.sagBacakAngle, 1, 0, 0)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
@@ -81,14 +136,17 @@ def drawDog():
     # SAĞ ARKA AYAK
     glPushMatrix()
     glTranslatef(0.18, -0.7, 0.8)
+    glRotatef(dog.solBacakAngle, 1, 0, 0)
     glColor3f(0.5, 0, 0)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
     # KUYRUK
+    glRotatef(dog.kuyruk, 0, 0, 1)
     glPushMatrix()
     glTranslatef(0.045, -0.25, 1.3)
     glRotatef(45,1,0,0)
     glColor3f(0, 0, 0.3)
     RectangularPrism(0.12, 0.12, 0.6)
     glPopMatrix()
+
