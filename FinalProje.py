@@ -1,5 +1,5 @@
 from OpenGL.GLU import *
-
+import OpenGL.GLUT as glut
 from Box import *
 from Human import *
 from Dog import *
@@ -87,33 +87,70 @@ def changeScreen():
         return PauseMenu()
 
 def MainMenu():
+    print("Main Menu")
     pygame.mixer.Channel(0).pause()
-    glClearColor(0.53, 0.88, 0.54, 0.0)
+    #glClearColor(0, 0, 0, 0)
     glClear(GL_COLOR_BUFFER_BIT)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
-    gluOrtho2D(-5.0, 5.0, -5.0, 5.0)
+    gluOrtho2D(-5, 5, -5, 5)
     glMatrixMode(GL_MODELVIEW)
     glPushMatrix()
-    glColor(1, 1, 0)
-    glutSolidSphere(1, 20, 20)
+    glColor3f(0, 1, 0)
+    glTranslatef(-5,-5,0)
+    glActiveTexture(GL_TEXTURE0)
+    LoadTextures("assets/main-menu.png")
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 1.0), glVertex2f(0.0, 0.0)
+    glTexCoord2f(0.0, 0.0), glVertex2f(0.0, 10.0)
+    glTexCoord2f(1.0, 0.0), glVertex2f(10.0,10.0)
+    glTexCoord2f(1.0, 1.0), glVertex2f(10.0, 0.0)
+    glEnd()
+
+    glDisable(GL_TEXTURE_2D)
     glPopMatrix()
     glutSwapBuffers()
 
 def PauseMenu():
+    print("Pause Menu")
     pygame.mixer.Channel(0).pause()
-    glClearColor(0.22, 0.44, 0.66, 0.0)
-    glClear(GL_COLOR_BUFFER_BIT)
-    glMatrixMode(GL_MODELVIEW)
+    glClearColor(0, 0, 0, 0)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    #glDepthFunc(GL_LESS)
+    #glEnable(GL_DEPTH_TEST)
+    #glMatrixMode(GL_MODELVIEW)
+    #glShadeModel(GL_SMOOTH)
     glLoadIdentity()
-    gluOrtho2D(-5.0, 5.0, -5.0, 5.0)
-    glMatrixMode(GL_MODELVIEW)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluOrtho2D(-5, 5, -5, 5)
+    #glMatrixMode(GL_MODELVIEW)
+
     glPushMatrix()
-    glColor(1, 1, 0)
-    glutSolidSphere(1, 20, 20)
+    glTranslatef(-5, -5, 0)
+    glActiveTexture(GL_TEXTURE0)
+    LoadTextures("assets/pause-menu.png")
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 1.0), glVertex2f(0.0, 0.0)
+    glTexCoord2f(0.0, 0.0), glVertex2f(0.0, 10.0)
+    glTexCoord2f(1.0, 0.0), glVertex2f(10.0, 10.0)
+    glTexCoord2f(1.0, 1.0), glVertex2f(10.0, 0.0)
+    glEnd()
+    glDisable(GL_TEXTURE_2D)
     glPopMatrix()
+    glPushMatrix()
+    glColor3f(0,1,0)
+    glTranslatef(1,-3,0)
+    textWrite("BİLALLL")
+    glPopMatrix()
+
+
     glutSwapBuffers()
 
+def textWrite(string):
+    glRasterPos3f(0, 0, 0)
+    for i in string:
+        glutBitmapCharacter(glut.GLUT_BITMAP_9_BY_15, ord(i))
 
 def display():
     global camera,dog,human,boxCordinate, boxList
