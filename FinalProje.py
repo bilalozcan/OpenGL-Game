@@ -1,55 +1,58 @@
 from OpenGL.GLU import *
+
+from Box import *
 from Human import *
 from Dog import *
 import math as m
 from MapTexture import *
 import pygame
-import random
 windowX = 1920
 windowY = 1080
 stopTime = 2.0
-dogX = 6.0
-
+boxCordinate = []
+boxList = []
 def init():
+    global boxCordinate
     pygame.init()
     pygame.mixer.init()
     pygame.mixer.Channel(0).play(pygame.mixer.Sound('assets/sounds/background-sounds.mp3'))
-    pygame.mixer.Channel(0).set_volume(0.01)
+    pygame.mixer.Channel(0).set_volume(0.05)
     pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
+    pygame.mixer.Channel(1).set_volume(0.8)
     pygame.mixer.Channel(1).stop()
 
+    for i in range(0,6):
+        boxCordinate.append([random.randint(-300,300),random.randint(-300,300)])
 
+class Tus():
+    keyW = False
+    keyA = False
+    keyD = False
 class Human():
     sagBacakAngle = 0
     solBacakAngle = 0
     durum = 0
+    humanSpace = 0
+    humanSpaceControl = False
+    angleY = 0.05
+    topxPos = 0.0
+    topzPos = 1.0
+    directionX = 0.0
+    directionZ = -1.0
+    hareket = False
+    engelVar = False
+    carpismaSayisi =0
 
 
-human = Human()
-
-
-def KosmaDurum(hareket):
-    global human
-    if(hareket == True):
-        if (human.durum == 0):
-            human.sagBacakAngle += 5
-            human.solBacakAngle -= 5
-            if (human.sagBacakAngle > 40):
-                human.durum = 1
-        elif (human.durum == 1):
-            human.sagBacakAngle -= 5
-            human.solBacakAngle += 5
-            if (human.sagBacakAngle < -40):
-                human.durum = 0
-    else :
-
-        human.sagBacakAngle = 0
-        human.solBacakAngle = 0
-
-
+class Dog():
+    sagBacakAngle = 0
+    solBacakAngle = 0
+    kuyruk = 0
+    durum = 0
+    hiz = 6.0
+    hareket = False
 
 class Camera():
-    angleX = 0.0
     angleY = 0.05
     directionX = 0.0
     directionZ = -1.0
@@ -58,55 +61,63 @@ class Camera():
     directionYmouse = 0.0
     directionY = 0
     xPos = 0.0
-    zPos = 1.0
+    zPos = -5.0
     yPos = 8.0
     zoom = 0.2
     mouse_x = 0
     mouse_y = 0
     mouse_left = 1
-    humanSpace = 0
-    humanSpaceControl = False
-    x = 0
-    y = 0
 
 
+tus = Tus()
 camera = Camera()
+human = Human()
+dog = Dog()
+MAIN_MENU_SCREEN = 0
+GAME_SCREEN = 1
+PAUSE_MENU_SCREEN = 2
+CurrentScreen = MAIN_MENU_SCREEN
+def changeScreen():
+    global CurrentScreen
+    if CurrentScreen == MAIN_MENU_SCREEN:
+        return MainMenu()
+    elif CurrentScreen == GAME_SCREEN:
+        return display()
+    elif CurrentScreen == PAUSE_MENU_SCREEN:
+        return PauseMenu()
 
-
-def getHuman():
-    global camera, human
+def MainMenu():
+    pygame.mixer.Channel(0).pause()
+    glClearColor(0.53, 0.88, 0.54, 0.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+    gluOrtho2D(-5.0, 5.0, -5.0, 5.0)
+    glMatrixMode(GL_MODELVIEW)
     glPushMatrix()
-    glTranslatef(0, 5, 0)
-    # glTranslatef(camera.xPos+8*camera.directionX, 0, (camera.zPos)+8*camera.directionZ)
-    glTranslatef(camera.xPos + 15 * camera.directionX, camera.humanSpace, (camera.zPos) + 15 * camera.directionZ)
-    HumanSpace()
-    glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
-    drawHuman(human)
+    glColor(1, 1, 0)
+    glutSolidSphere(1, 20, 20)
     glPopMatrix()
+    glutSwapBuffers()
 
-
-def getDog():
-    global camera, dogX
-    rand = random.randint(0, 1)
-    if rand == 1:
-        if dogX >= 13 and dogX < 14.1:
-            r = random.randint(0, 3)
-            if r == 0:
-                dogX -= random.uniform(0, 0.05)
-            else:
-                dogX += random.uniform(0, 0.05)
-        elif dogX <= 13:
-            dogX += random.uniform(0, 0.05)
+def PauseMenu():
+    pygame.mixer.Channel(0).pause()
+    glClearColor(0.22, 0.44, 0.66, 0.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+    gluOrtho2D(-5.0, 5.0, -5.0, 5.0)
+    glMatrixMode(GL_MODELVIEW)
     glPushMatrix()
-    glTranslatef(0, 1, 0)
-    glTranslatef(camera.xPos + dogX * camera.directionX, 0, (camera.zPos) + dogX * camera.directionZ)
-    glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
-    drawDog()
+    glColor(1, 1, 0)
+    glutSolidSphere(1, 20, 20)
     glPopMatrix()
+    glutSwapBuffers()
 
 
 def display():
-    global camera
+    global camera,dog,human,boxCordinate, boxList
+    pygame.mixer.Channel(0).unpause()
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glDepthFunc(GL_LESS)
@@ -121,56 +132,72 @@ def display():
               camera.yPos - camera.zoom + camera.directionY-0.18 + camera.directionYmouse,
               camera.zPos + camera.directionZ + camera.directionZmouse, 0, 1, 0)
     mapTexture(300, 100, 300)
-    getHuman()
-    getDog()
+    getDog(camera,dog,human)
+    keyControl()
+    for i in range(0,6):
+        boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1]))
+    getHuman(camera, human, boxList)
     glutSwapBuffers()
 
-
-def keyPressed(*args):
-    global camera, human
-    fraction = 2
-    if args[0] == b"\x1b":
-        glutDestroyWindow(b"Followw")
+def keyControl():
+    global camera,human,tus
+    if(human.engelVar == False):
+        if tus.keyW == True:
+            if pygame.mixer.Channel(1).get_busy():
+                pass
+            else:
+                pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
+            camera.xPos += camera.directionX
+            camera.zPos += camera.directionZ
+            camera.yPos += camera.directionY
+        elif(tus.keyA):
+            human.angleY -= 0.1
+        elif(tus.keyD):
+            human.angleY +=0.1
+def keyUp(*args):
+    global  tus
     if args[0] == b"a":
-        pass
-        # camera.angleY -= 0.05
-        # camera.directionX = m.sin(camera.angleY)
-        # camera.directionZ = -m.cos(camera.angleY)
+        tus.keyA = False
     elif args[0] == b"d":
-        pass
-        # camera.angleY += 0.05
-        # camera.directionX = m.sin(camera.angleY)
-        # camera.directionZ = -m.cos(camera.angleY)
+        tus.keyD = False
     elif args[0] == b"w":
-        if pygame.mixer.Channel(1).get_busy():
-            pass
-        else:
-            pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
-        KosmaDurum(True)
-        camera.xPos += camera.directionX * fraction
-        camera.zPos += camera.directionZ * fraction
-        camera.yPos += camera.directionY * fraction
-    elif args[0] == b"s":
-        camera.xPos -= camera.directionX * fraction
-        camera.zPos -= camera.directionZ * fraction
-        camera.yPos -= camera.directionY * fraction
+        pygame.mixer.Channel(1).stop()
+        if (human.engelVar == True):
+            pygame.mixer.Channel(2).play(pygame.mixer.Sound('assets/sounds/carpma.mp3'))
+        human.hareket = False
+        tus.keyW = False
     elif args[0] == b" ":
-        if (camera.humanSpace == 0):
-            camera.humanSpaceControl = True
+        pass
 
     glutPostRedisplay()
 
-def HumanSpace():
-    global camera
-    if (camera.humanSpaceControl):
-        camera.humanSpace += 0.1
-        if (camera.humanSpace >= 2):
-            camera.humanSpaceControl = False
-    elif (camera.humanSpace > 0):
-        camera.humanSpace -= 0.2
-        if (camera.humanSpace < 0):
-            camera.humanSpace = 0
+def keyPressed(*args):
+    global camera, human,tus,CurrentScreen
+    if args[0] == b'\r':
+        CurrentScreen = GAME_SCREEN
+    elif args[0] == b"p":
+        CurrentScreen = PAUSE_MENU_SCREEN
 
+    if args[0] == b"\x1b":
+        glutDestroyWindow(b"Followw")
+    if args[0] == b"a":
+        tus.keyA =True
+    elif args[0] == b"d":
+        tus.keyD = True
+    elif args[0] == b"w":
+        human.hareket = True
+        tus.keyW = True
+    elif args[0] == b"s":
+        human.engelVar = False
+        camera.xPos -= camera.directionX
+        camera.zPos -= camera.directionZ
+        camera.yPos -= camera.directionY
+
+    elif args[0] == b" ":
+        if (human.humanSpace == 0):
+            human.humanSpaceControl = True
+
+    glutPostRedisplay()
 
 def mouse(button, state, x, y):
     global camera
@@ -181,46 +208,39 @@ def mouse(button, state, x, y):
             camera.mouse_left = 0
 
 
-"""def mouseMotion(x,y):
-    global camera
-    if camera.mouse_left:
-        camera.directionXmouse += (x - camera.mouse_x)*0.0005
-        camera.directionYmouse += -(y - camera.mouse_y)*0.0005"""
-
-
 def mouseMotion(x, y):
-    global camera
-
-    if (camera.mouse_x == 0):
-        camera.mouse_x = x
-        if (x > windowX / 2):
-            camera.angleY += 0.03
+    global camera,human
+    if(human.engelVar == False):
+        if (camera.mouse_x == 0):
+            camera.mouse_x = x
+            if (x > windowX / 2):
+                camera.angleY += 0.03
+                camera.directionX = m.sin(camera.angleY)
+                camera.directionZ = -m.cos(camera.angleY)
+            else:
+                camera.angleY -= 0.03
+                camera.directionX = m.sin(camera.angleY)
+                camera.directionZ = -m.cos(camera.angleY)
+        if (x > 1800):
+            camera.mouse_x = x
+            camera.angleY += 0.1
+            camera.directionX = m.sin(camera.angleY)
+            camera.directionZ = -m.cos(camera.angleY)
+        if (x < 100):
+            camera.mouse_x = x
+            camera.angleY -= 0.1
             camera.directionX = m.sin(camera.angleY)
             camera.directionZ = -m.cos(camera.angleY)
         else:
-            camera.angleY -= 0.03
-            camera.directionX = m.sin(camera.angleY)
-            camera.directionZ = -m.cos(camera.angleY)
-    if (x > 1800):
-        camera.mouse_x = x
-        camera.angleY += 0.1
-        camera.directionX = m.sin(camera.angleY)
-        camera.directionZ = -m.cos(camera.angleY)
-    if (x < 100):
-        camera.mouse_x = x
-        camera.angleY -= 0.1
-        camera.directionX = m.sin(camera.angleY)
-        camera.directionZ = -m.cos(camera.angleY)
-    else:
-        if (x > camera.mouse_x):
-            camera.angleY += 0.03
-            camera.directionX = m.sin(camera.angleY)
-            camera.directionZ = -m.cos(camera.angleY)
-        else:
-            camera.angleY -= 0.03
-            camera.directionX = m.sin(camera.angleY)
-            camera.directionZ = -m.cos(camera.angleY)
-        camera.mouse_x = x
+            if (x > camera.mouse_x):
+                camera.angleY += 0.03
+                camera.directionX = m.sin(camera.angleY)
+                camera.directionZ = -m.cos(camera.angleY)
+            else:
+                camera.angleY -= 0.03
+                camera.directionX = m.sin(camera.angleY)
+                camera.directionZ = -m.cos(camera.angleY)
+            camera.mouse_x = x
 
 
 def MouseWheel(*args):
@@ -236,34 +256,22 @@ def MouseWheel(*args):
     print(camera.yPos)
     glutPostRedisplay()
 
-
-def human_Control(value):
-    global human,stopTime
-    if(human.sagBacakAngle == value):
-        KosmaDurum(False)
-        pygame.mixer.Channel(1).stop()
-    glutPostRedisplay()
-    glutTimerFunc(int(1000/stopTime), human_Control,human.sagBacakAngle)
-
-
 def main():
     init()
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
     glutInitWindowSize(windowX, windowY)
     glutInitWindowPosition(0, 0)
-    glutIdleFunc(display)
+    glutIdleFunc(changeScreen)
     glutCreateWindow(b"Followw")
-    glutDisplayFunc(display)
-    glutIdleFunc(display)
+    glutDisplayFunc(changeScreen)
+    glutIdleFunc(changeScreen)
     glutKeyboardFunc(keyPressed)
+    glutKeyboardUpFunc(keyUp)
     glutMouseWheelFunc(MouseWheel)
     glutMouseFunc(mouse)
     glutPassiveMotionFunc(mouseMotion)
-    glutTimerFunc(int(1000/stopTime), human_Control, human.sagBacakAngle)
     glutMainLoop()
     glEnable(GL_DEPTH_TEST)
-
-
 
 main()
