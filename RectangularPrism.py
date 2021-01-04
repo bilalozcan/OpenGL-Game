@@ -1,7 +1,7 @@
 from OpenGL.GL import *
 
 def RectangularPrism(width, height, depth):
-    # Üst Yüzey
+    #Üst Yüzey
     glBegin(GL_QUADS)
     glVertex3f(width, height, -depth)
     glVertex3f(-width, height, -depth)

@@ -3,23 +3,13 @@ import random
 import pygame
 
 from RectangularPrism import *
-def getDog(camera,dog,human):
+def getDog(camera,dog,human,game):
     dog.hareket =True
     rand = random.randint(0, 1)
-    print(human.carpismaSayisi)
-    """if rand == 1:
-       
-            r = random.randint(0, 3)
-            if r == 0:
-                dog.hiz -= random.uniform(0, 0.05)
-            else:
-                dog.hiz += random.uniform(0, 0.05)
-        elif dog.hiz <= 13:
-            dog.hiz += random.uniform(0, 0.05)"""
     if(dog.hiz>6):
         pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog1.mp3'))
-    if dog.hiz >= 13 and dog.hiz < 14.1:
-        print("OYUN BİTTİ")
+    if dog.hiz >= 13 and dog.hiz < 14.1 and game.end != True:
+        game.end = True
     elif (human.carpismaSayisi > 100):
         dog.hiz += 0.5
     elif (human.carpismaSayisi > 80):

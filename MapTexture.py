@@ -19,8 +19,8 @@ def LoadTextures(str):
 def mapTexture(mapX,mapY,mapZ):
     glPushMatrix()
     glActiveTexture(GL_TEXTURE0)
-    LoadTextures("assets/grass.png")
-    glColor3f(0.55, 0.92, 0.49)
+    LoadTextures("assets/sand.png")
+    glColor3f(1, 1, 1)
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 0.0), glVertex3f(-mapX, 0.0, -mapZ)
     glTexCoord2f(0.0, 1.0), glVertex3f(-mapX, 0.0, mapZ)
