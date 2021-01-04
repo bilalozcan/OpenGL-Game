@@ -55,28 +55,28 @@ def DogKosmaDurum(dog):
 def drawDog(dog):
     # GÖVDE
     glPushMatrix()
-    glColor3f(0.37, 0.18, 0)
+    glColor3f(0.85, 0.85, 85)
     RectangularPrism(0.312, 0.312, 1)
     glPopMatrix()
 
     # KAFA
     glPushMatrix()
     glTranslatef(0, 0, -0.4)
-    glColor3f(0.20, 0.188, 0)
+    glColor3f(0.694, 0.654, 0.65)
     RectangularPrism(0.4, 0.4, 0.4)
     glPopMatrix()
 
     # SAĞ KULAK
     glPushMatrix()
     glTranslatef(0.2, 0.4, -0.9)
-    glColor3f(0, 0.45, 0)
+    glColor3f(0.823, 0.823, 0.82)
     RectangularPrism(0.1, 0.1, 0.03)
     glPopMatrix()
 
     # SOL KULAK
     glPushMatrix()
     glTranslatef(-0.2, 0.4, -0.9)
-    glColor3f(0, 0.45, 0)
+    glColor3f(0.823, 0.823, 0.82)
     RectangularPrism(0.1, 0.1, 0.03)
     glPopMatrix()
 
@@ -112,7 +112,7 @@ def drawDog(dog):
     glPushMatrix()
     glTranslatef(-0.18, -0.7, -0.4)
     glRotatef(dog.solBacakAngle, 1, 0, 0)
-    glColor3f(0.5, 0, 0)
+    glColor3f(0.929, 0.929, 0.874)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
@@ -120,7 +120,7 @@ def drawDog(dog):
     glPushMatrix()
     glTranslatef(0.18, -0.7, -0.4)
     glRotatef(dog.sagBacakAngle, 1, 0, 0)
-    glColor3f(0.5, 0, 0)
+    glColor3f(0.929, 0.929, 0.874)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
@@ -128,7 +128,7 @@ def drawDog(dog):
     glPushMatrix()
     glTranslatef(-0.18, -0.7, 0.8)
     glRotatef(dog.sagBacakAngle, 1, 0, 0)
-    glColor3f(0.5, 0, 0)
+    glColor3f(0.929, 0.929, 0.874)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
@@ -136,7 +136,7 @@ def drawDog(dog):
     glPushMatrix()
     glTranslatef(0.18, -0.7, 0.8)
     glRotatef(dog.solBacakAngle, 1, 0, 0)
-    glColor3f(0.5, 0, 0)
+    glColor3f(0.929, 0.929, 0.874)
     RectangularPrism(0.12, 0.47, 0.12)
     glPopMatrix()
 
@@ -145,7 +145,7 @@ def drawDog(dog):
     glPushMatrix()
     glTranslatef(0.045, -0.25, 1.3)
     glRotatef(45,1,0,0)
-    glColor3f(0, 0, 0.3)
+    glColor3f(1,1,1)
     RectangularPrism(0.12, 0.12, 0.6)
     glPopMatrix()
 
