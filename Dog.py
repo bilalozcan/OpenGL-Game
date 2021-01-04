@@ -7,7 +7,7 @@ def getDog(camera,dog,human,game):
     rand = random.randint(0, 1)
     if(dog.hiz>6):
         pygame.mixer.Channel(4).play(pygame.mixer.Sound('assets/sounds/dog1.mp3'))
-    if dog.hiz >= 13 and dog.hiz < 14.1 and game.end != True:
+    if dog.hiz >= 13.5 and dog.hiz < 14.1 and game.end != True:
         game.end = True
     elif (human.carpismaSayisi > 100):
         dog.hiz += 0.5
@@ -17,8 +17,10 @@ def getDog(camera,dog,human,game):
         dog.hiz += 0.05
     elif (human.carpismaSayisi > 20):
         dog.hiz += 0.005
-    elif(human.carpismaSayisi == 0):
-        dog.hiz = 4
+    elif (human.carpismaSayisi < 0):
+        dog.hiz -= 0.0005
+    elif (human.carpismaSayisi < -20):
+        dog.hiz -= 0.005
 
     glPushMatrix()
     glTranslatef(0, 1, 0)
@@ -31,14 +33,14 @@ def getDog(camera,dog,human,game):
 def DogKosmaDurum(dog):
     if(dog.hareket == True):
         if (dog.durum == 0):
-            dog.sagBacakAngle += dog.hiz/2
-            dog.solBacakAngle -= dog.hiz/2
+            dog.sagBacakAngle += dog.hiz
+            dog.solBacakAngle -= dog.hiz
             dog.kuyruk +=dog.hiz
             if (dog.sagBacakAngle > 40):
                 dog.durum = 1
         elif (dog.durum == 1):
-            dog.sagBacakAngle -= dog.hiz/2
-            dog.solBacakAngle += dog.hiz/2
+            dog.sagBacakAngle -= dog.hiz
+            dog.solBacakAngle += dog.hiz
             dog.kuyruk -= dog.hiz
             if (dog.sagBacakAngle < -40):
                 dog.durum = 0
