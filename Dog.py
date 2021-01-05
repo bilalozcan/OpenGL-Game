@@ -4,7 +4,7 @@ from RectangularPrism import *
 ''' Köpeği oluşturma işlevi burada çağırılır
     İnsanın oyundaki çarpma ve hareketine göre köğein hızını ayarlar
 '''
-def getDog(camera,dog,human,game):
+def getDog(control, dog, human, game):
     dog.hareket =True
     rand = random.randint(0, 1)
     if((dog.hiz>7 and dog.hiz<7.5)or(dog.hiz>8.5 and dog.hiz<9)or(dog.hiz>10 and dog.hiz<10.5)or(dog.hiz>11.5 and dog.hiz<12) or dog.hiz>13):
@@ -26,8 +26,8 @@ def getDog(camera,dog,human,game):
 
     glPushMatrix()
     glTranslatef(0, 1, 0)
-    glTranslatef(camera.xPos + dog.hiz * camera.directionX, 0, (camera.zPos) + dog.hiz * camera.directionZ)
-    glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
+    glTranslatef(control.xPos + dog.hiz * control.directionX, 0, (control.zPos) + dog.hiz * control.directionZ)
+    glRotatef(-57.5 * (control.angleY), 0, 1, 0)
     DogKosmaDurum(dog)
     drawDog(dog)
     glPopMatrix()

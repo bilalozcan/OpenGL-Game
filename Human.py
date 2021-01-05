@@ -5,7 +5,7 @@ from RectangularPrism import *
 ''' İnsanın engellerin içine girmesini ve sahne sınırlarının dışına çıkmasını
     kontrol edip engelleyen fonksiyondur
     GiftBox toplama kontrolünü de yapar'''
-def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
+def is_Inside(x_value,z_value,human,boxList,plusBox):
     if z_value > plusBox.z1 and z_value < plusBox.z2 and x_value > plusBox.x1 and x_value < plusBox.x2:
         plusBox.hide = False
         pygame.mixer.Channel(5).play(pygame.mixer.Sound('assets/sounds/eat.mp3'))
@@ -31,18 +31,17 @@ def is_Inside(x_value,z_value,human,camera,boxList,plusBox):
 ''' İnsan oluşturma çağrısı burada yapılır
     Zıplama ve hareket durumlarını kontrol eder ve değişiklik uygulanır
 '''
-def getHuman(camera,human,boxList,plusBox):
+def getHuman(control, human, boxList, plusBox):
     HumanKosmaDurum(human)
     glPushMatrix()
     glTranslatef(0, 5, 0)
-    #glTranslatef(camera.xPos + 15 * camera.directionX, human.humanSpace, (camera.zPos) + 15 * camera.directionZ)
-    is_Inside(camera.xPos + 15 * camera.directionX, (camera.zPos) + 15 * camera.directionZ,human,camera,boxList,plusBox)
+    is_Inside(control.xPos + 15 * control.directionX, (control.zPos) + 15 * control.directionZ, human, boxList, plusBox)
     if(human.engelVar==False):
-        human.topxPos =camera.xPos + 15 * camera.directionX
-        human.topzPos = (camera.zPos) + 15 * camera.directionZ
+        human.topxPos = control.xPos + 15 * control.directionX
+        human.topzPos = (control.zPos) + 15 * control.directionZ
     glTranslatef(human.topxPos, human.humanSpace, human.topzPos)
     HumanSpace(human)
-    glRotatef(-57.5 * (camera.angleY), 0, 1, 0)
+    glRotatef(-57.5 * (control.angleY), 0, 1, 0)
     drawHuman(human)
     glPopMatrix()
 

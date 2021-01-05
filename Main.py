@@ -41,7 +41,7 @@ class Game():
     pause = False
     ses = False
     win = False
-''' MEHMET EKLEYECEK '''
+''' Hediye Kutusu durumunun tutulduğu class '''
 class PlusBox():
     hide = False
     plusBoxCordinateX = random.randint(-300,300)
@@ -58,58 +58,54 @@ class Tus():
     keyW = False
     keyA = False
     keyD = False
+
 ''' İnsan modeli için gerekli parametrelerin (zıplama/hareket/engele çarpma gibi) tutulduğu class '''
 class Human():
-    sagBacakAngle = 0
-    solBacakAngle = 0
-    durum = 0
-    humanSpace = 0
-    humanSpaceControl = False
-    angleY = 0.05
-    topxPos = 0.0
-    topzPos = 1.0
-    directionX = 0.0
-    directionZ = -1.0
+    sagBacakAngle = 0 #Sağ Bacak dönme açısı
+    solBacakAngle = 0 #Sol Bacak dönme açısı
+    durum = 0 # Bacak ileri geri hareket durumu
+    humanSpace = 0 # Zıplama
+    humanSpaceControl = False # Zıplama Durumu
+    topxPos = 0.0 # İnsanın anlık X konumu
+    topzPos = 1.0 # İnsanın anlık Y konumu
     hareket = False
     engelVar = False
     carpismaSayisi =0
-    xPos = 0
-    zPos =-5
-    backStep =0
+    backStep =0 #Geri adım atma sayısı
 
 ''' Köpek modeli için gerekli parametrelerin (hareket/hız gibi) tutulduğu class '''
 class Dog():
-    sagBacakAngle = 0
-    solBacakAngle = 0
-    kuyruk = 0
+    sagBacakAngle = 0 # Sağ Bacak dönme açısı
+    solBacakAngle = 0 # Sol Bacak dönme açısı
+    kuyruk = 0 # Kuyruk dönme açısı
     durum = 0
     hiz = 6.0
     hareket = False
 
-''' MEHMET EKLEYECEK '''
-class Camera():
+''' Genel Konum kontrol sınıfıdır. Kameranın, insanın, farenin konumu, görüş açısı, dönme açısı gibi değerler buraya bağlıdır '''
+class Control():
     angleY = 0.05
-    directionX = 0.0
-    directionZ = -1.0
-    directionXmouse = 0.0
-    directionZmouse = 0.0
-    directionYmouse = 0.0
-    directionY = 0
-    xPos = 0.0
-    zPos = -5.0
-    yPos = 8.0
-    zoom = 0.2
-    mouse_x = 0
-    mouse_y = 0
-    mouse_left = 1
-    mouseTikX =0
-    mouseTikY =0
+    directionX = 0.0 # Genel Dönme Açısı (İnsan/Köpek/Kamera)
+    directionY = 0  # Genel Dönme Açısı (İnsan/Köpek/Kamera)
+    directionZ = -1.0 # Genel Dönme Açısı (İnsan/Köpek/Kamera)
+    directionXmouse = 0.0 # Mouse ile Dönme Açısı
+    directionYmouse = 0.0 # Mouse ile Dönme Açısı
+    directionZmouse = 0.0 # Mouse ile Dönme Açısı
+    xPos = 0.0 # Kameranın X Konumu
+    zPos = -5.0 # Kameranın Z Konumu
+    yPos = 8.0 # Kameranın Y Konumu
+    zoom = 0.2 #
+    mouse_x = 0 # Mouse Anlık X Konumu
+    mouse_y = 0 # Mouse Anlık Y Konumu
+    mouse_left = 1 # Mouse Tıklandı mı
+    mouseTikX =0 # Mouse Tıklama X Konumu
+    mouseTikY =0 # Mouse Tıklama Y Konumu
 
-''' MEHMET EKLEYECEK '''
+''' Oyun ile ilgili temel objelerin oluşturulması '''
 game = Game()
 plusBox = PlusBox()
 tus = Tus()
-camera = Camera()
+control = Control()
 human = Human()
 dog = Dog()
 stopTime = 2.0
@@ -118,11 +114,11 @@ boxList = []
 
 ''' Oyuna yeniden başlama durumunda insan/köpek/kamera konumu gibi değerleri sıfırlayan fonksiyon '''
 def restart():
-    global game,plusBox,tus,camera,human,dog,stopTime
+    global game,plusBox,tus,control,human,dog,stopTime
     game.score = 0
     plusBox = PlusBox()
     tus = Tus()
-    camera = Camera()
+    control = Control()
     human = Human()
     dog = Dog()
     stopTime = 2.0
@@ -151,7 +147,7 @@ def changeScreen():
     if CurrentScreen == MAIN_MENU_SCREEN:
         return MainMenu()
     elif CurrentScreen == GAME_SCREEN:
-        return display()
+        return GameScreen()
     elif CurrentScreen == PAUSE_MENU_SCREEN:
         return PauseMenu()
 
@@ -211,7 +207,7 @@ def PauseMenu():
     glutSwapBuffers()
 
 ''' Bitiş Ekranını çalıştıran fonksiyon
-    Texture ile Resume, Restart ve Mute/Unmute butonları içerir '''
+    Texture ile Restart butonu içerir '''
 def EndMenu():
     glClearColor(0, 0, 0, 0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -245,8 +241,8 @@ def textWrite(string):
 
 ''' Oyun Ekranını çalıştıran fonksiyon
     3D bir sahne, köpek, insan, engeller içerir '''
-def display():
-    global camera,dog,human,boxCordinate, boxList,plusBox
+def GameScreen():
+    global control,dog,human,boxCordinate, boxList,plusBox
     pygame.mixer.Channel(0).unpause() # Arkaplan sesinin resume edilmesi
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -260,11 +256,11 @@ def display():
     glLoadIdentity()
 
     # Kameranın pozisyonu ve bakış açısının ayarlanması
-    gluLookAt(camera.xPos, camera.yPos, camera.zPos, camera.xPos + camera.directionX + camera.directionXmouse,
-              camera.yPos - camera.zoom + camera.directionY-0.18 + camera.directionYmouse,
-              camera.zPos + camera.directionZ + camera.directionZmouse, 0, 1, 0)
+    gluLookAt(control.xPos, control.yPos, control.zPos, control.xPos + control.directionX + control.directionXmouse,
+              control.yPos - control.zoom + control.directionY - 0.18 + control.directionYmouse,
+              control.zPos + control.directionZ + control.directionZmouse, 0, 1, 0)
     mapTexture(300, 100, 300) # 3D sahnenin zemin, gökyüzü ve etraf texture'larının yapılması
-    getDog(camera,dog,human,game) #Verilen parametreleri kullanarak sahnede köpek oluşturur
+    getDog(control, dog, human, game) #Verilen parametreleri kullanarak sahnede köpek oluşturur
     keyControl() # İki tuş basma kontrolünü sağlar
     plusBox.x1, plusBox.x2, plusBox.z1, plusBox.z2 = getBox(2, 2, 2, plusBox.plusBoxCordinateX, 1,
                                                             plusBox.plusBoxCordinateY,"assets/giftbox.png" )
@@ -278,25 +274,25 @@ def display():
     # Sahnede 6 tane engel oluşturulması
     for i in range(0,6):
         boxList.append(getBox(5,5,5,boxCordinate[i][0],2.5,boxCordinate[i][1],"assets/box.png"))
-    getHuman(camera, human, boxList,plusBox)
+    getHuman(control, human, boxList, plusBox)
     if(tus.keyW == False):
         dog.hiz += 0.01
     glPushMatrix()
     glColor3f(1, 0,0)
     stra = "KÖPEK KALAN MESAFE:{:.3}".format(13.5 - dog.hiz)
-    glTranslatef(camera.xPos + 10 * camera.directionX, 9.3, (camera.zPos) + 10 * camera.directionZ)
+    glTranslatef(control.xPos + 10 * control.directionX, 9.1, (control.zPos) + 10 * control.directionZ)
     textWrite(stra)
     glPopMatrix()
     glPushMatrix()
     glColor3f(1, 0,0)
     strb = "GERI ADIM SAYISI:{:.2}".format(str(20-human.backStep))
-    glTranslatef(camera.xPos + 10 * camera.directionX, 9, (camera.zPos) + 10 * camera.directionZ)
+    glTranslatef(control.xPos + 10 * control.directionX, 8.8, (control.zPos) + 10 * control.directionZ)
     textWrite(strb)
     glPopMatrix()
     glPushMatrix()
     glColor3f(1, 0, 0)
     strb = "SCORE:{:.3}".format(str(game.score - 10))
-    glTranslatef(camera.xPos + 10 * camera.directionX, 9.5, (camera.zPos) + 10 * camera.directionZ)
+    glTranslatef(control.xPos + 10 * control.directionX, 9.4, (control.zPos) + 10 * control.directionZ)
     textWrite(strb)
     glPopMatrix()
 
@@ -306,7 +302,9 @@ def display():
     İki tuşa basarak iki hareket işlevinin beraber yapılmasını sağlar
 '''
 def keyControl():
-    global camera,human,tus
+    global control,human,tus
+    ''' Engel varsa insan hareket edemez
+        Engel yoksa 2 tuş ile hareket buradan sağlanır'''
     if(human.engelVar == False):
         if(tus.keyW==True and tus.keyA):
             pass
@@ -317,18 +315,18 @@ def keyControl():
                 pass
             else:
                 pygame.mixer.Channel(1).play(pygame.mixer.Sound('assets/sounds/walk-human.mp3'))
-            camera.xPos += camera.directionX*1.5
-            camera.zPos += camera.directionZ*1.5
-            camera.yPos += camera.directionY*1.5
-
-
+            control.xPos += control.directionX * 1.5
+            control.zPos += control.directionZ * 1.5
+            control.yPos += control.directionY * 1.5
         elif(tus.keyA):
             pass
         elif(tus.keyD):
             pass
 
 ''' Tuşa basılı tutma işlevini kontrol edip
-    Ona göre insana hareket kazandıran fonksiyon '''
+    Ona göre insana hareket kazandıran fonksiyon 
+    Tuştan basılı tutma bırakıldıgı an durumu false olur
+'''
 def keyUp(*args):
     global  tus
     if args[0] == b"a":
@@ -347,14 +345,14 @@ def keyUp(*args):
     glutPostRedisplay()
 ''' İnsan ve kameranın klavye ile kontrolünü sağlayan fonksiyon '''
 def keyPressed(*args):
-    global camera, human,tus,CurrentScreen
+    global control, human,tus,CurrentScreen
     if args[0] == b'\r':
         CurrentScreen = GAME_SCREEN
     elif args[0] == b"p":
         CurrentScreen = PAUSE_MENU_SCREEN
     if(CurrentScreen == GAME_SCREEN):
         if args[0] == b"\x1b":
-            glutDestroyWindow(b"Followww")
+            glutDestroyWindow(b"Beni Yakala 3D")
         if args[0] == b"a":
             tus.keyA =True
         elif args[0] == b"d":
@@ -366,9 +364,9 @@ def keyPressed(*args):
             if(human.backStep<20):
                 human.backStep +=1
                 human.engelVar = False
-                camera.xPos -= camera.directionX
-                camera.zPos -= camera.directionZ
-                camera.yPos -= camera.directionY
+                control.xPos -= control.directionX
+                control.zPos -= control.directionZ
+                control.yPos -= control.directionY
 
         elif args[0] == b" ":
             if (human.backStep > 0):
@@ -383,10 +381,10 @@ def keyPressed(*args):
     gerekli işevleri -Gerekli Ekran Geçişlerini- yapmasını sağlayan fonksiyon 
 '''
 def mouse(button, state, x, y):
-    global camera,CurrentScreen
+    global control,CurrentScreen
     if GLUT_LEFT_BUTTON == 0:
         if GLUT_DOWN == 0:
-            camera.mouse_left = 1
+            control.mouse_left = 1
             if(CurrentScreen == MAIN_MENU_SCREEN):
                 if(x>885 and x<1060 and y<530 and y>400):
                     CurrentScreen = GAME_SCREEN
@@ -418,52 +416,56 @@ def mouse(button, state, x, y):
                     CurrentScreen = GAME_SCREEN
 
         if GLUT_UP == 0:
-            camera.mouse_left = 0
+            control.mouse_left = 0
 
 ''' Fare hareketine göre kamera açısını ayarlayan fonksiyondur '''
 def mouseMotion(x, y):
-    global camera,human
+    global control,human
     if(human.engelVar == False and CurrentScreen == GAME_SCREEN):
-        if (camera.mouse_x == 0):
-            camera.mouse_x = x
+        '''İlk başlangıç inin mouse'un geçmiş bir konumu olmadığı için ekranın sağına gidilirse kamera açısı sağa
+            sola gidilirse kamera açısı sola döner.
+            Daha sonraki durumlarda mouse'un önceki konumuna göre sola gidilirse açı sola
+            sağa gidilirse açı sağa döner'''
+        if (control.mouse_x == 0): #Mouse'un başlangıç değeri olmadığı için ortayı baz alır
+            control.mouse_x = x
             if (x > windowX / 2):
-                camera.angleY += 0.04
-                camera.directionX = m.sin(camera.angleY)
-                camera.directionZ = -m.cos(camera.angleY)
+                control.angleY += 0.04
+                control.directionX = m.sin(control.angleY)
+                control.directionZ = -m.cos(control.angleY)
             else:
-                camera.angleY -= 0.04
-                camera.directionX = m.sin(camera.angleY)
-                camera.directionZ = -m.cos(camera.angleY)
+                control.angleY -= 0.04
+                control.directionX = m.sin(control.angleY)
+                control.directionZ = -m.cos(control.angleY)
         if (x > 1800):
-            camera.mouse_x = x
-            camera.angleY += 0.09
-            camera.directionX = m.sin(camera.angleY)
-            camera.directionZ = -m.cos(camera.angleY)
+            control.mouse_x = x
+            control.angleY += 0.09
+            control.directionX = m.sin(control.angleY)
+            control.directionZ = -m.cos(control.angleY)
         if (x < 100):
-            camera.mouse_x = x
-            camera.angleY -= 0.09
-            camera.directionX = m.sin(camera.angleY)
-            camera.directionZ = -m.cos(camera.angleY)
+            control.mouse_x = x
+            control.angleY -= 0.09
+            control.directionX = m.sin(control.angleY)
+            control.directionZ = -m.cos(control.angleY)
         else:
-            if (x > camera.mouse_x):
-                camera.angleY += 0.04
-                camera.directionX = m.sin(camera.angleY)
-                camera.directionZ = -m.cos(camera.angleY)
+            if (x > control.mouse_x):
+                control.angleY += 0.04
+                control.directionX = m.sin(control.angleY)
+                control.directionZ = -m.cos(control.angleY)
             else:
-                camera.angleY -= 0.04
-                camera.directionX = m.sin(camera.angleY)
-                camera.directionZ = -m.cos(camera.angleY)
-            camera.mouse_x = x
+                control.angleY -= 0.04
+                control.directionX = m.sin(control.angleY)
+                control.directionZ = -m.cos(control.angleY)
+            control.mouse_x = x
 
 ''' Mouse tekerleği ile kameranın aşağı yukarı hareket etmesini sağlayan fonksiyon '''
 def MouseWheel(*args):
-    global camera
+    global control
     if args[1] == -1:
-        if (camera.yPos > 3):
-            camera.yPos -= 0.1
+        if (control.yPos > 3):
+            control.yPos -= 0.1
     elif args[1] == 1:
-        if (camera.yPos < 9):
-            camera.yPos += 0.1
+        if (control.yPos < 9):
+            control.yPos += 0.1
     else:
         pass
     glutPostRedisplay()
